@@ -1,4 +1,4 @@
-package com.greenkey.weighttracker;
+package com.greenkey.weighttracker.statistics;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,13 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.WeightRecord;
+
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Alexander on 28.12.2016.
  */
-public class FragmentOne extends Fragment {
+public class StatisticsWeightRecordListFragment extends Fragment {
 
     @Nullable
     @Override

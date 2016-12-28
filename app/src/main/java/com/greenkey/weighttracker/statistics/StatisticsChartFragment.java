@@ -1,4 +1,4 @@
-package com.greenkey.weighttracker;
+package com.greenkey.weighttracker.statistics;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.greenkey.weighttracker.R;
+
 /**
  * Created by Alexander on 28.12.2016.
  */
-public class FragmentDwa extends Fragment {
+public class StatisticsChartFragment extends Fragment {
 
     @Nullable
     @Override

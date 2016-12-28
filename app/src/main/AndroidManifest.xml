@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.greenkey.weighttracker.MainActivity"
+            android:name=".main.MainActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>
@@ -19,13 +19,13 @@
         </activity>
 
         <activity
-            android:name="com.greenkey.weighttracker.StatisticsActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".statistics.StatisticsActivity"
+            android:parentActivityName=".main.MainActivity"
             android:screenOrientation="portrait">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".main.MainActivity" />
         </activity>
 
     </application>

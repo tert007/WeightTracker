@@ -1,6 +1,5 @@
-package com.greenkey.weighttracker;
+package com.greenkey.weighttracker.statistics;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.greenkey.weighttracker.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,13 @@ public class StatisticsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        viewPagerAdapter.addFrag(new StatisticsWeightRecordListFragment(), null);
+        viewPagerAdapter.addFrag(new StatisticsChartFragment(), null);
+
         viewPager = (ViewPager) findViewById(R.id.statistics_view_pager);
-        setupViewPager();
+        viewPager.setAdapter(viewPagerAdapter);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -71,15 +77,6 @@ public class StatisticsActivity extends AppCompatActivity {
         for (int i = 0; i < tabIcons.length; i++) {
             tabLayout.getTabAt(i).setIcon(tabIcons[i]);
         }
-    }
-
-    private void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        adapter.addFrag(new FragmentOne(), null);
-        adapter.addFrag(new FragmentDwa(), null);
-
-        viewPager.setAdapter(adapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

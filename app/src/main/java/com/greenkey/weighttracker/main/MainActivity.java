@@ -1,4 +1,4 @@
-package com.greenkey.weighttracker;
+package com.greenkey.weighttracker.main;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
