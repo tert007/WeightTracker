@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ListView
+        android:id="@+id/statistics_list_view"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+
+    <TextView
+        android:id="@+id/statistics_empty_list_view"
+
+        android:gravity="center"
+
+        android:visibility="gone"
+        
+        android:text="Empty View"
+        android:textSize="30sp"
+        android:textColor="@color/grey"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
+
