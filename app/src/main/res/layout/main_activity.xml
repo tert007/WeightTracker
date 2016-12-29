@@ -58,6 +58,8 @@
         android:layout_height="0dp"/>
 
     <Button
+        android:id="@+id/main_add_weight_record_button"
+
         android:text="Изменить"
 
         android:textColor="@color/light_white"

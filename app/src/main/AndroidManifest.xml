@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.greenkey.weighttracker">
 
     <application
@@ -28,6 +29,15 @@
                 android:value=".main.MainActivity" />
         </activity>
 
-    </application>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:parentActivityName=".main.MainActivity"
+            android:screenOrientation="portrait">
 
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MainActivity" />
+        </activity>
+
+    </application>
 </manifest>

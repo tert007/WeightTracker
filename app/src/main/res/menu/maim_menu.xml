@@ -11,4 +11,12 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        android:icon="@drawable/settings_icon"
+
+        android:orderInCategory="200"
+        app:showAsAction="ifRoom" />
+
 </menu>
