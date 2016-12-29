@@ -16,6 +16,10 @@ public class SettingsManager {
     private static int WEIGHT_UNIT_INDEX_DEFAULT_VALUE = 0;
     private static WeightUnit currentWeightUnit;
 
+    private static String GOAL_WEIGHT_KEY = "goal_weight";
+    private static float GOAL_WEIGHT_DEFAULT_VALUE = 0;
+    private static float goalWeight;
+
     private static WeightUnit[] weightUnites;
 
     static {
