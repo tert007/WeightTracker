@@ -8,6 +8,7 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/statistics_list_view_item_value_text_view"
         tools:text="60"
         android:textSize="24sp"
         android:textColor="@color/grey"
@@ -15,4 +16,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/statistics_list_view_item_date_text_view"
+        tools:text="12 jun 1222"
+        android:textSize="24sp"
+        android:textColor="@color/grey"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/statistics_list_view_item_remove_image_view"
+        android:text="Удалить"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

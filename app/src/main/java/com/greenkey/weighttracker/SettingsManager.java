@@ -30,6 +30,7 @@ public class SettingsManager {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    //WeightUnit
     public static void setWeightUnitIndex(int index) {
         currentWeightUnit = weightUnites[index];
         sharedPreferences.edit().putInt(WEIGHT_UNIT_INDEX_KEY, index).apply();
@@ -44,6 +45,17 @@ public class SettingsManager {
         currentWeightUnit = weightUnites[weightUnitIndex];
 
         return currentWeightUnit;
+    }
+
+    //GoalWeight
+    public static void setGoalWeight(float weight) {
+        goalWeight = weight;
+        sharedPreferences.edit().putFloat(GOAL_WEIGHT_KEY, goalWeight).apply();
+    }
+
+    public static float getGoalWeight() {
+        goalWeight = sharedPreferences.getFloat(GOAL_WEIGHT_KEY, GOAL_WEIGHT_DEFAULT_VALUE);
+        return goalWeight;
     }
 
 }

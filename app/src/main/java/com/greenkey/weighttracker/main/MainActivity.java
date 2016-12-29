@@ -13,13 +13,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.WeightRecord;
 import com.greenkey.weighttracker.settings.SettingsActivity;
 import com.greenkey.weighttracker.statistics.StatisticsActivity;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String NOT_INITIALIZED_VALUE = "--";
+
+    private Realm realm;
+
+    private TextView currentWeightTextView;
+    private TextView weightUnitTextView;
+
+    private WeightRecord currentWeightRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +44,20 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
-        SettingsManager.init(this);
+        realm = Realm.getDefaultInstance();
 
-        final Button addWeightButton = (Button) findViewById(R.id.main_add_weight_record_button);
-        addWeightButton.setOnClickListener(new View.OnClickListener() {
+        final RealmResults<WeightRecord> records = realm.where(WeightRecord.class).findAll();
+        if (! records.isEmpty()) {
+            currentWeightRecord = records.last();
+        } else {
+            currentWeightRecord = null;
+        }
+
+        currentWeightTextView = (TextView) findViewById(R.id.main_current_weight_text_view);
+        weightUnitTextView = (TextView) findViewById(R.id.main_weight_unit_text_view);
+
+        final Button updateCurrentWeightButton = (Button) findViewById(R.id.main_update_current_weight_button);
+        updateCurrentWeightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -42,16 +66,37 @@ public class MainActivity extends AppCompatActivity {
                 final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
                 final View setCurrentWeightView = inflater.inflate(R.layout.set_current_weight_dialog, null);
 
-                final NumberPicker numberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_number_picker);
+                final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_first_number_picker);
+                final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_second_number_pickrer);
 
-                numberPicker.setMinValue(1);
-                numberPicker.setMaxValue(999);
+                firstNumberPicker.setMinValue(1);
+                firstNumberPicker.setMaxValue(999);
+
+                secondNumberPicker.setMinValue(0);
+                secondNumberPicker.setMaxValue(9);
+
+                if (currentWeightRecord != null) {
+                    firstNumberPicker.setValue(currentWeightRecord.getFistPartOfValue());
+                    secondNumberPicker.setValue(currentWeightRecord.getSecondPartOfValue());
+                }
 
                 builder.setView(setCurrentWeightView);
 
                 builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        realm.beginTransaction();
+                        WeightRecord weightRecord = realm.createObject(WeightRecord.class);
 
+                        String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+                        weightRecord.setValue(Float.valueOf(value));
+
+                        weightRecord.setDate(System.currentTimeMillis());
+
+                        realm.copyToRealm(weightRecord);
+                        realm.commitTransaction();
+
+                        currentWeightRecord = weightRecord;
+                        currentWeightTextView.setText(currentWeightRecord.getValueByString());
                     }
                 });
 
@@ -62,8 +107,25 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 AlertDialog dialog = builder.create();
-                dialog.show();            }
+                dialog.show();
+            }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (currentWeightRecord != null) {
+            currentWeightTextView.setText(currentWeightRecord.getValueByString());
+        } else {
+            currentWeightTextView.setText(NOT_INITIALIZED_VALUE);
+        }
+
+        int index = SettingsManager.getWeightUnitIndex();
+        String[] units = getResources().getStringArray(R.array.weight_units_short_name);
+
+        weightUnitTextView.setText(units[index]);
     }
 
     @Override
@@ -84,5 +146,11 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 }

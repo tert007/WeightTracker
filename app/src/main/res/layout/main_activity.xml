@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -23,8 +23,6 @@
 
     <RelativeLayout
         android:orientation="vertical"
-        android:background="@drawable/circle"
-
         android:layout_gravity="center_horizontal"
         android:layout_width="150dp"
         android:layout_height="150dp">
@@ -33,7 +31,7 @@
             android:id="@+id/main_current_weight_text_view"
             android:layout_centerInParent="true"
 
-            android:text="60"
+            tools:text="60"
             android:textSize="50sp"
             android:textColor="@color/grey"
 
@@ -41,10 +39,12 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/main_weight_unit_text_view"
+
             android:layout_below="@id/main_current_weight_text_view"
             android:layout_centerHorizontal="true"
 
-            android:text="КГ"
+            tools:text="кг"
             android:textSize="24sp"
             android:textColor="@color/grey"
 
@@ -58,7 +58,7 @@
         android:layout_height="0dp"/>
 
     <Button
-        android:id="@+id/main_add_weight_record_button"
+        android:id="@+id/main_update_current_weight_button"
 
         android:text="Изменить"
 
