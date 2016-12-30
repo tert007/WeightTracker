@@ -21,7 +21,7 @@
         android:layout_gravity="center_horizontal" />
 
     <TextView
-        android:text="Ваш текущий вес"
+        android:text="@string/your_current_weight"
         android:textSize="24sp"
         android:textColor="@color/grey"
         android:gravity="center_horizontal"

@@ -31,9 +31,9 @@
             android:layout_height="wrap_content">
 
             <TextView
-                tools:text="Цель"
+                android:text="@string/desired_weight"
                 android:textColor="@color/grey"
-                android:textSize="30sp"
+                android:textSize="26sp"
 
                 android:layout_marginRight="8sp"
                 android:layout_marginEnd="8sp"
@@ -42,9 +42,11 @@
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/statistics_goal_weight_text_view"
+
                 tools:text="70"
                 android:textColor="@color/grey"
-                android:textSize="30sp"
+                android:textSize="26sp"
 
                 android:layout_marginRight="8sp"
                 android:layout_marginEnd="8sp"
@@ -53,18 +55,29 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                tools:text="Kg"
+                android:id="@+id/statistics_weight_unite_text_view"
+
+                tools:text="kg"
                 android:textColor="@color/grey"
-                android:textSize="30sp"
+                android:textSize="26sp"
+
+                android:layout_marginRight="8sp"
+                android:layout_marginEnd="8sp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/statistics_goal_weight_edit_image_view"
+
+                android:src="@drawable/edit_icon_selector"
+
+                android:layout_gravity="center_vertical"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <android.support.design.widget.TabLayout

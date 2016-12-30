@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,14 +27,16 @@ import com.greenkey.weighttracker.statistics.StatisticsActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SettingsManager.SettingsObserver{
 
     private static final String NOT_INITIALIZED_VALUE = "--";
 
     private Realm realm;
     private CircularProgressBar circularProgressBar;
 
+    private float desireWeight;
     private int weightUnitIndex;
+
     private WeightRecord currentWeightRecord;
     private WeightRecord firstWeightRecord;
 
@@ -41,24 +44,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        circularProgressBar = (CircularProgressBar)findViewById(R.id.main_current_weight_progress_bar);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
-        weightUnitIndex = SettingsManager.getWeightUnitIndex();
-        realm = Realm.getDefaultInstance();
-
-        final RealmResults<WeightRecord> records = realm.where(WeightRecord.class).findAll();
-        if ( ! records.isEmpty()) {
-            firstWeightRecord = records.first();
-            currentWeightRecord = records.last();
-
-
-        } else {
-            firstWeightRecord = null;
-            currentWeightRecord = null;
-        }
+        circularProgressBar = (CircularProgressBar)findViewById(R.id.main_current_weight_progress_bar);
 
         final Button updateCurrentWeightButton = (Button) findViewById(R.id.main_update_current_weight_button);
         updateCurrentWeightButton.setOnClickListener(new View.OnClickListener() {
@@ -68,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
                 builder.setTitle(R.string.set_current_weight);
 
                 final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-                final View setCurrentWeightView = inflater.inflate(R.layout.set_current_weight_dialog, null);
+                final View setCurrentWeightView = inflater.inflate(R.layout.set_weight_dialog, null);
 
-                final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_first_number_picker);
-                final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_second_number_pickrer);
+                final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
+                final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
 
                 firstNumberPicker.setMinValue(1);
                 firstNumberPicker.setMaxValue(999);
@@ -126,21 +117,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateProgressBar();
+        SettingsManager.subscribe(this);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void update(float desireWeight, int weightUnitIndex) {
+        Log.d("SETTINGS", "UPDATE_SETTINGS_MAIN");
 
-        weightUnitIndex = SettingsManager.getWeightUnitIndex();
+        this.desireWeight = desireWeight;
+        this.weightUnitIndex = weightUnitIndex;
+
+        updateProgressBar();
     }
 
     private void updateProgressBar() {
         String[] units = getResources().getStringArray(R.array.weight_units_short_name);
 
+        realm = Realm.getDefaultInstance();
+
+        final RealmResults<WeightRecord> records = realm.where(WeightRecord.class).findAll();
+        if ( ! records.isEmpty()) {
+            firstWeightRecord = records.first();
+            currentWeightRecord = records.last();
+        } else {
+            firstWeightRecord = null;
+            currentWeightRecord = null;
+        }
+
         ////sdfsdf
-        SettingsManager.setGoalWeight(30);
+        //SettingsManager.setGoalWeight(30);
 
         if (currentWeightRecord != null && firstWeightRecord != null) {
             //currentWeightTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
@@ -151,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
             }
             else{
-                circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.reject_red));
+                circularProgressBar.setProgressColor(ContextCompat.getColor(this, R.color.reject_red));
             }
             circularProgressBar.setProgress((int)progress);
 
