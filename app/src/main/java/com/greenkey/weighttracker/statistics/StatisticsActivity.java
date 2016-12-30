@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    private Realm realm;
-    private WeightRecord lastWeightRecord;
+    //private Realm realm;
+    //private WeightRecord lastWeightRecord;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -67,7 +68,14 @@ public class StatisticsActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
-        realm = Realm.getDefaultInstance();
+        /*realm = Realm.getDefaultInstance();
+
+        final RealmResults<WeightRecord> records = realm.where(WeightRecord.class).findAll();
+        if ( !records.isEmpty() ) {
+            lastWeightRecord = records.last();
+        } else {
+            lastWeightRecord = null;
+        }*/
     }
 
     @Override
@@ -79,60 +87,66 @@ public class StatisticsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add:
-                final Button updateCurrentWeightButton = (Button) findViewById(R.id.main_update_current_weight_button);
-                updateCurrentWeightButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsActivity.this);
-                        builder.setTitle(R.string.set_current_weight);
+            case R.id.add: {
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsActivity.this);
+                builder.setTitle(R.string.set_current_weight);
 
-                        final LayoutInflater inflater = LayoutInflater.from(StatisticsActivity.this);
-                        final View setCurrentWeightView = inflater.inflate(R.layout.set_current_weight_dialog, null);
+                final LayoutInflater inflater = LayoutInflater.from(StatisticsActivity.this);
+                final View setCurrentWeightView = inflater.inflate(R.layout.set_current_weight_dialog, null);
 
-                        final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_first_number_picker);
-                        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_second_number_pickrer);
+                final NumberPicker firstNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_first_number_picker);
+                final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.set_current_weight_dialog_second_number_pickrer);
 
-                        firstNumberPicker.setMinValue(1);
-                        firstNumberPicker.setMaxValue(999);
+                firstNumberPicker.setMinValue(1);
+                firstNumberPicker.setMaxValue(999);
 
-                        secondNumberPicker.setMinValue(0);
-                        secondNumberPicker.setMaxValue(9);
+                secondNumberPicker.setMinValue(0);
+                secondNumberPicker.setMaxValue(9);
 
-                        builder.setView(setCurrentWeightView);
+                if (lastWeightRecord != null) {
+                    firstNumberPicker.setValue(lastWeightRecord.getFistPartOfValue());
+                    secondNumberPicker.setValue(lastWeightRecord.getSecondPartOfValue());
+                }
 
-                        builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                realm.beginTransaction();
-                                WeightRecord weightRecord = realm.createObject(WeightRecord.class);
+                builder.setView(setCurrentWeightView);
 
-                                String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
-                                weightRecord.setValue(Float.valueOf(value));
+                builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        realm.beginTransaction();
+                        WeightRecord weightRecord = realm.createObject(WeightRecord.class);
 
-                                weightRecord.setDate(System.currentTimeMillis());
+                        String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+                        weightRecord.setValue(Float.valueOf(value));
 
-                                realm.copyToRealm(weightRecord);
-                                realm.commitTransaction();
+                        weightRecord.setDate(System.currentTimeMillis());
 
-                                lastWeightRecord = weightRecord;
-                            }
-                        });
+                        realm.copyToRealm(weightRecord);
+                        realm.commitTransaction();
 
-                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        lastWeightRecord = weightRecord;
                     }
                 });
-                return true;
+
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();*/
+            }
+            return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+/*
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }*/
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();

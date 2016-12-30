@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 
 import io.realm.OrderedRealmCollection;
@@ -23,6 +25,8 @@ import io.realm.RealmResults;
  * Created by Alexander on 28.12.2016.
  */
 public class StatisticsWeightRecordListFragment extends Fragment {
+
+    private int weightUnitIndex;
 
     private Realm realm;
     private RealmResults<WeightRecord> realmResults;
@@ -43,6 +47,8 @@ public class StatisticsWeightRecordListFragment extends Fragment {
         listView.setEmptyView(emptyView);
         listView.setAdapter(adapter);
 
+        weightUnitIndex = SettingsManager.getWeightUnitIndex();
+
         return view;
     }
 
@@ -62,7 +68,7 @@ public class StatisticsWeightRecordListFragment extends Fragment {
             WeightRecord weightRecord = getItem(position);
             if (weightRecord != null) {
                 final TextView valueTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_value_text_view);
-                valueTextView.setText(weightRecord.getValueByString());
+                valueTextView.setText(WeightHelper.convertByString(weightRecord.getValue(), weightUnitIndex));
 
                 final TextView dateTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_date_text_view);
                 dateTextView.setText(weightRecord.getDateByString());

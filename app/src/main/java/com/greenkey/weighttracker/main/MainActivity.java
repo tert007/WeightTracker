@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 import com.greenkey.weighttracker.settings.SettingsActivity;
 import com.greenkey.weighttracker.statistics.StatisticsActivity;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView currentWeightTextView;
     private TextView weightUnitTextView;
 
+    private int weightUnitIndex;
     private WeightRecord currentWeightRecord;
 
     @Override
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
 
         final RealmResults<WeightRecord> records = realm.where(WeightRecord.class).findAll();
-        if (! records.isEmpty()) {
+        if ( ! records.isEmpty()) {
             currentWeightRecord = records.last();
         } else {
             currentWeightRecord = null;
@@ -76,8 +78,13 @@ public class MainActivity extends AppCompatActivity {
                 secondNumberPicker.setMaxValue(9);
 
                 if (currentWeightRecord != null) {
-                    firstNumberPicker.setValue(currentWeightRecord.getFistPartOfValue());
-                    secondNumberPicker.setValue(currentWeightRecord.getSecondPartOfValue());
+                    float convertedValue = WeightHelper.convert(currentWeightRecord.getValue(), weightUnitIndex);
+
+                    int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+                    int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+
+                    firstNumberPicker.setValue(firstPartOfValue);
+                    secondNumberPicker.setValue(secondPartOfValue);
                 }
 
                 builder.setView(setCurrentWeightView);
@@ -88,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
                         WeightRecord weightRecord = realm.createObject(WeightRecord.class);
 
                         String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
-                        weightRecord.setValue(Float.valueOf(value));
+
+                        float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), weightUnitIndex);
+                        weightRecord.setValue(reconvertedValue);
 
                         weightRecord.setDate(System.currentTimeMillis());
 
@@ -96,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         realm.commitTransaction();
 
                         currentWeightRecord = weightRecord;
-                        currentWeightTextView.setText(currentWeightRecord.getValueByString());
+                        currentWeightTextView.setText(WeightHelper.convertByString(weightRecord.getValue(), weightUnitIndex));
                     }
                 });
 
@@ -116,16 +125,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        weightUnitIndex = SettingsManager.getWeightUnitIndex();
+
         if (currentWeightRecord != null) {
-            currentWeightTextView.setText(currentWeightRecord.getValueByString());
+            currentWeightTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
         } else {
             currentWeightTextView.setText(NOT_INITIALIZED_VALUE);
         }
 
-        int index = SettingsManager.getWeightUnitIndex();
         String[] units = getResources().getStringArray(R.array.weight_units_short_name);
 
-        weightUnitTextView.setText(units[index]);
+        weightUnitTextView.setText(units[weightUnitIndex]);
     }
 
     @Override

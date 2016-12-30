@@ -13,12 +13,9 @@ import io.realm.RealmObject;
  */
 public class WeightRecord extends RealmObject {
 
-    private static final DecimalFormat decimalFormat;
     private static final SimpleDateFormat simpleDateFormate;
 
     static {
-        decimalFormat = new DecimalFormat("#00.0");
-
         simpleDateFormate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         simpleDateFormate.setTimeZone(TimeZone.getDefault());
     }
@@ -28,24 +25,6 @@ public class WeightRecord extends RealmObject {
 
     public float getValue() {
         return value;
-    }
-
-    public String getValueByString() {
-        return decimalFormat.format(value);
-    }
-
-    /**
-     * Get integer part of the value.
-     */
-    public int getFistPartOfValue() {
-        return (int) value;
-    }
-
-    /**
-     * Get fractional part of the value.
-     */
-    public int getSecondPartOfValue() {
-        return Math.round((value - (int) value) * 10);
     }
 
     public void setValue(float value) {
