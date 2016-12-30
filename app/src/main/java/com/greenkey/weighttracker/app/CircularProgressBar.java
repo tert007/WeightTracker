@@ -39,6 +39,15 @@ public class CircularProgressBar extends View {
         this(context, null);
     }
 
+    public CircularProgressBar(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public CircularProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    }
+
     public String getMainText() {
         return mainText;
     }
@@ -53,15 +62,6 @@ public class CircularProgressBar extends View {
 
     public void setAdditionalText(String additionalText) {
         this.additionalText = additionalText;
-    }
-
-    public CircularProgressBar(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public CircularProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     @Override
