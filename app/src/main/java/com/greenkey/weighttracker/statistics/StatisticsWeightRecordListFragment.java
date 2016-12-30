@@ -23,10 +23,14 @@ import com.greenkey.weighttracker.SettingsManager;
 import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 
+import java.util.Collections;
+import java.util.List;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by Alexander on 28.12.2016.
@@ -74,6 +78,7 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
 
         Activity activity = getActivity();
         if (activity != null) {
+            realmResults = realmResults.sort("date", Sort.DESCENDING);
             listView.setAdapter(new WeightListAdapter(getActivity(), realmResults));
         }
     }
@@ -84,12 +89,14 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
 
         private final int greenColor;
         private final int redColor;
+        private final int grey;
 
         public WeightListAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<WeightRecord> data) {
             super(context, data);
 
             this.greenColor = ContextCompat.getColor(context, R.color.accept_green);
             this.redColor = ContextCompat.getColor(context, R.color.reject_red);
+            this.grey = ContextCompat.getColor(context, R.color.grey);
         }
 
         @Override
@@ -113,10 +120,11 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
 
             final TextView weightDifferenceTexView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_difference);
 
-            if (position == 0) {
+            if (position == getCount() - 1) {
                 weightDifferenceTexView.setText(NOT_INITIALIZED_VALUE);
+                weightDifferenceTexView.setTextColor(grey);
             } else {
-                final WeightRecord previousWeightRecord = getItem(position - 1);
+                final WeightRecord previousWeightRecord = getItem(position + 1);
 
                 final float previousWeight = previousWeightRecord.getValue();
                 final float currentWeight = currentWeightRecord.getValue();
@@ -125,6 +133,7 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
 
                 if (weightDifference == 0) {
                     weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));
+                    weightDifferenceTexView.setTextColor(grey);
                 } else {
 
                     if (desireWeight > currentWeight) {

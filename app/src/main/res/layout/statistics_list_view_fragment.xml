@@ -9,9 +9,6 @@
     <ListView
         android:id="@+id/statistics_list_view"
 
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>

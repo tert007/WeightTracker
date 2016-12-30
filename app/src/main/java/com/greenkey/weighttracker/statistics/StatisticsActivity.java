@@ -77,6 +77,8 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         goalWeightTextView = (TextView) findViewById(R.id.statistics_goal_weight_text_view);
         weightUnitTextView = (TextView) findViewById(R.id.statistics_weight_unite_text_view);
 
+        SettingsManager.subscribe(this);
+
         final View goalWeightEditImageView = findViewById(R.id.statistics_goal_weight_edit_image_view);
         goalWeightEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,8 +98,7 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
                 secondNumberPicker.setMinValue(0);
                 secondNumberPicker.setMaxValue(9);
 
-                final float currentGoalWeight = SettingsManager.getGoalWeight();
-                final float convertedValue = WeightHelper.convert(currentGoalWeight, weightUnitIndex);
+                final float convertedValue = WeightHelper.convert(desireWeight, weightUnitIndex);
 
                 final int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
                 final int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
@@ -129,8 +130,6 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
                 dialog.show();
             }
         });
-
-        SettingsManager.subscribe(this);
     }
 
     @Override
@@ -139,7 +138,6 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
 
         this.desireWeight = desireWeight;
         this.weightUnitIndex = weightUnitIndex;
-
 
         goalWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
         weightUnitTextView.setText(units[weightUnitIndex]);

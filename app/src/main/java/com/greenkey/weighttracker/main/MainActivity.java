@@ -143,19 +143,16 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
             currentWeightRecord = null;
         }
 
-        ////sdfsdf
-        //SettingsManager.setGoalWeight(30);
-
         if (currentWeightRecord != null && firstWeightRecord != null) {
             //currentWeightTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
-            float firstDiff = Math.abs(SettingsManager.getGoalWeight() - firstWeightRecord.getValue());
-            float currDiff = Math.abs(SettingsManager.getGoalWeight() - currentWeightRecord.getValue());
+            float firstDiff = Math.abs(desireWeight - firstWeightRecord.getValue());
+            float currDiff = Math.abs(desireWeight - currentWeightRecord.getValue());
 
-            if(currentWeightRecord.getValue() > SettingsManager.getGoalWeight() && currentWeightRecord.getValue() > firstWeightRecord.getValue()){
+            if(currentWeightRecord.getValue() > desireWeight && currentWeightRecord.getValue() > firstWeightRecord.getValue()){
                 circularProgressBar.setProgress(100);
                 circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
             }
-            else if(currentWeightRecord.getValue() < SettingsManager.getGoalWeight() && currentWeightRecord.getValue() < firstWeightRecord.getValue()){
+            else if(currentWeightRecord.getValue() < desireWeight && currentWeightRecord.getValue() < firstWeightRecord.getValue()){
                 circularProgressBar.setProgress(100);
                 circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
             }

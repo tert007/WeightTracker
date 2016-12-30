@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 /**
  * Created by Alexander on 29.12.2016.
@@ -51,6 +50,9 @@ public class SettingsManager {
 
     public static void init(Context context) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        currentGoalWeight = sharedPreferences.getFloat(GOAL_WEIGHT_KEY, GOAL_WEIGHT_DEFAULT_VALUE);
+        currentWeightUnitIndex = sharedPreferences.getInt(WEIGHT_UNIT_INDEX_KEY, WEIGHT_UNIT_INDEX_DEFAULT_VALUE);
     }
 
     //WeightUnit
@@ -61,7 +63,7 @@ public class SettingsManager {
     }
 
     public static int getWeightUnitIndex() {
-        currentWeightUnitIndex = sharedPreferences.getInt(WEIGHT_UNIT_INDEX_KEY, WEIGHT_UNIT_INDEX_DEFAULT_VALUE);
+        //currentWeightUnitIndex = sharedPreferences.getInt(WEIGHT_UNIT_INDEX_KEY, WEIGHT_UNIT_INDEX_DEFAULT_VALUE);
         return currentWeightUnitIndex;
     }
 
@@ -80,7 +82,7 @@ public class SettingsManager {
     }
 
     public static float getGoalWeight() {
-        currentGoalWeight = sharedPreferences.getFloat(GOAL_WEIGHT_KEY, GOAL_WEIGHT_DEFAULT_VALUE);
+        //currentGoalWeight = sharedPreferences.getFloat(GOAL_WEIGHT_KEY, GOAL_WEIGHT_DEFAULT_VALUE);
         return currentGoalWeight;
     }
 
