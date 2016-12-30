@@ -13,6 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
+
+    <com.greenkey.weighttracker.app.CircularProgressBar
+        android:id="@+id/main_current_weight_progress_bar"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal" />
+
     <TextView
         android:text="Ваш текущий вес"
         android:textSize="24sp"

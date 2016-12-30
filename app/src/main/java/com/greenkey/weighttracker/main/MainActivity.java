@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 import com.greenkey.weighttracker.settings.SettingsActivity;
 import com.greenkey.weighttracker.statistics.StatisticsActivity;
@@ -30,18 +29,19 @@ public class MainActivity extends AppCompatActivity {
     private static final String NOT_INITIALIZED_VALUE = "--";
 
     private Realm realm;
-
+    private CircularProgressBar circularProgressBar;
     private TextView currentWeightTextView;
     private TextView weightUnitTextView;
 
     private int weightUnitIndex;
     private WeightRecord currentWeightRecord;
+    private WeightRecord firstWeightRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
+        circularProgressBar = (CircularProgressBar)findViewById(R.id.main_current_weight_progress_bar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
@@ -127,8 +127,23 @@ public class MainActivity extends AppCompatActivity {
 
         weightUnitIndex = SettingsManager.getWeightUnitIndex();
 
+        SettingsManager.setGoalWeight(30);
+        int index = SettingsManager.getWeightUnitIndex();
+        String[] units = getResources().getStringArray(R.array.weight_units_short_name);
         if (currentWeightRecord != null) {
             currentWeightTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
+            float firstDiff = Math.abs(SettingsManager.getGoalWeight() - firstWeightRecord.getValue());
+            float currDiff = Math.abs(SettingsManager.getGoalWeight() - currentWeightRecord.getValue());
+            float progress = 100 - ((currDiff / firstDiff) * 100);
+            if(progress > 0){
+                circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
+            }
+            else{
+                circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.reject_red));
+            }
+            circularProgressBar.setProgress((int)progress);
+            circularProgressBar.setMainText(currentWeightRecord.getValueByString());
+            circularProgressBar.setAdditionalText(units[index]);
         } else {
             currentWeightTextView.setText(NOT_INITIALIZED_VALUE);
         }
