@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         circularProgressBar = (CircularProgressBar)findViewById(R.id.main_current_weight_progress_bar);
+        circularProgressBar.setTextColor(ContextCompat.getColor(this,R.color.grey));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
@@ -146,17 +147,24 @@ public class MainActivity extends AppCompatActivity {
             //currentWeightTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
             float firstDiff = Math.abs(SettingsManager.getGoalWeight() - firstWeightRecord.getValue());
             float currDiff = Math.abs(SettingsManager.getGoalWeight() - currentWeightRecord.getValue());
-            float progress = 100 - ((currDiff / firstDiff) * 100);
-            if(progress > 0){
+
+            if(currentWeightRecord.getValue() > SettingsManager.getGoalWeight() && currentWeightRecord.getValue() > firstWeightRecord.getValue()){
+                circularProgressBar.setProgress(100);
                 circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
             }
-            else{
-                circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.reject_red));
-            }
-            circularProgressBar.setProgress((int)progress);
-
-            if (currentWeightRecord.getValue() > SettingsManager.getGoalWeight() && currentWeightRecord.getValue() > firstWeightRecord.getValue()) {
+            else if(currentWeightRecord.getValue() < SettingsManager.getGoalWeight() && currentWeightRecord.getValue() < firstWeightRecord.getValue()){
                 circularProgressBar.setProgress(100);
+                circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
+            }
+            else {
+                float progress = 100 - ((currDiff / firstDiff) * 100);
+                if(progress > 0){
+                    circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.accept_green));
+                }
+                else{
+                    circularProgressBar.setProgressColor(ContextCompat.getColor(this,R.color.reject_red));
+                }
+                circularProgressBar.setProgress((int)progress);
             }
 
             circularProgressBar.setMainText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));

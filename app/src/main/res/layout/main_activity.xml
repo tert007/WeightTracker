@@ -14,66 +14,35 @@
         android:layout_height="0dp"/>
 
 
+    <TextView
+        android:text="Ваш текущий вес"
+        android:textSize="24sp"
+        android:textColor="@color/grey"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
     <com.greenkey.weighttracker.app.CircularProgressBar
         android:id="@+id/main_current_weight_progress_bar"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_gravity="center_horizontal" />
 
-    <TextView
-        android:text="Ваш текущий вес"
-        android:textSize="24sp"
-        android:textColor="@color/grey"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="150dp"
-        android:layout_height="150dp">
-
-        <TextView
-            android:id="@+id/main_current_weight_text_view"
-            android:layout_centerInParent="true"
-
-            tools:text="60"
-            android:textSize="50sp"
-            android:textColor="@color/grey"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/main_weight_unit_text_view"
-
-            android:layout_below="@id/main_current_weight_text_view"
-            android:layout_centerHorizontal="true"
-
-            tools:text="кг"
-            android:textSize="24sp"
-            android:textColor="@color/grey"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
     <View
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
     <Button
         android:id="@+id/main_update_current_weight_button"
-
         android:text="Изменить"
-
         android:textColor="@color/light_white"
-
         android:theme="@style/ButtonStyle"
         android:layout_gravity="center_horizontal"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content" />
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"/>
 
 </LinearLayout>
