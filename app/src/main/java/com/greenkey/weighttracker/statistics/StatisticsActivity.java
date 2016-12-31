@@ -151,14 +151,14 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        /*switch (item.getItemId()) {
             case R.id.add: {
 
             }
             return true;
-            default:
+            default:*/
                 return super.onOptionsItemSelected(item);
-        }
+        //}
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

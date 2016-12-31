@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <include layout="@layout/toolbar"/>
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:padding="16dp"
 
-        android:id="@+id/settings_weight_unit_view"
+        android:id="@+id/start_dialog_weight_unit_view"
 
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -27,7 +24,7 @@
             <TextView
                 android:text="@string/weight_unit"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -37,7 +34,7 @@
                 android:layout_height="match_parent"/>
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/settings_weight_unit_spinner"
+                android:id="@+id/start_dialog_weight_unit_spinner"
 
                 android:entries="@array/weight_units"
 
@@ -45,15 +42,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </android.support.v7.widget.AppCompatSpinner>
-
         </LinearLayout>
 
         <TextView
             android:text="@string/choose_desire_weight_unit"
             android:textColor="@color/grey"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <NumberPicker
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/set_weight_dialog_first_number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </NumberPicker>
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:text="."
+            android:textSize="40sp"
+            android:textColor="@color/grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <NumberPicker
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/set_weight_dialog_second_number_pickrer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </NumberPicker>
+
     </LinearLayout>
 </LinearLayout>
+

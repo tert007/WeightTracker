@@ -39,7 +39,7 @@
 
     <Button
         android:id="@+id/main_update_current_weight_button"
-        android:text="Изменить"
+        android:text="@string/weigh"
         android:textColor="@color/light_white"
         android:theme="@style/ButtonStyle"
         android:layout_gravity="center_horizontal"

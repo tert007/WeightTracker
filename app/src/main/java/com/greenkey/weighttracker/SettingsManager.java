@@ -55,6 +55,16 @@ public class SettingsManager {
         currentWeightUnitIndex = sharedPreferences.getInt(WEIGHT_UNIT_INDEX_KEY, WEIGHT_UNIT_INDEX_DEFAULT_VALUE);
     }
 
+    public static void setParams(int weightIndex, float desireWeight) {
+        currentWeightUnitIndex = weightIndex;
+        currentGoalWeight = desireWeight;
+
+        sharedPreferences.edit().putInt(WEIGHT_UNIT_INDEX_KEY, weightIndex).apply();
+        sharedPreferences.edit().putFloat(GOAL_WEIGHT_KEY, desireWeight).apply();
+
+        informSubscribers();
+    }
+
     //WeightUnit
     public static void setWeightUnitIndex(int index) {
         currentWeightUnitIndex = index;
