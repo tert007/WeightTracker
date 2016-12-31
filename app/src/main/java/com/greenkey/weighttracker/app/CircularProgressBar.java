@@ -103,7 +103,7 @@ public class CircularProgressBar extends View {
 
         // Center text
         int xPos = (canvas.getWidth() / 2) - mStrokeWidth/2;
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) - 20;
+        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) - 30;
 
         canvas.drawText(mainText, xPos, yPos, mPaint);
     }
@@ -116,7 +116,7 @@ public class CircularProgressBar extends View {
 
         // Center text
         int xPos = (canvas.getWidth() / 2) - mStrokeWidth/2;
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) + 20;
+        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) + 30;
 
         canvas.drawText(additionalText, xPos, yPos, mPaint);
     }

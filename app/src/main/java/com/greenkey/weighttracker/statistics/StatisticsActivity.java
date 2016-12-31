@@ -37,8 +37,8 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
     private String[] units;
 
     private final static int[] tabIcons = {
-            R.drawable.test_1,
-            R.drawable.test_2
+            R.drawable.ic_signs,
+            R.drawable.ic_bars_chart
     };
 
     private TextView goalWeightTextView;
