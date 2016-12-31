@@ -23,8 +23,8 @@
         <LinearLayout
             android:gravity="center_horizontal"
 
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
 
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
@@ -76,6 +76,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -85,11 +86,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed"
-        app:tabGravity="fill"/>
+        app:tabGravity="fill"
+        android:background="@color/colorPrimaryLight"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/statistics_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>
