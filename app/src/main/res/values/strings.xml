@@ -9,6 +9,8 @@
     <string name="cancel">Cancel</string>
     <string name="set">Set</string>
 
+    <string name="weigh">Weigh</string>
+
     <string name="set_desired_weight">Set a desired weight</string>
     <string name="desired_weight">Desired weight</string>
 
@@ -18,6 +20,11 @@
     <string name="change_weight">Change the weight</string>
 
     <string name="remove_message">Do you want to remove the record?</string>
+
+    <string name="empty_list_view">You don\'t have any records</string>
+
+    <string name="weight_unit">Weight unit</string>
+    <string name="choose_desire_weight_unit">Choose a desire weight unit</string>
 
     <string-array name="weight_units_short_name">
         <item>kg</item>

@@ -19,9 +19,9 @@
         android:gravity="center"
 
         android:visibility="gone"
-        
-        android:text="Empty View"
-        android:textSize="30sp"
+
+        android:text="@string/empty_list_view"
+        android:textSize="20sp"
         android:textColor="@color/grey"
 
         android:layout_width="match_parent"

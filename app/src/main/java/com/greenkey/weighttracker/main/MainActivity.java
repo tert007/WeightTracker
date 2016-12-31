@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
@@ -44,8 +46,10 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
         circularProgressBar = (CircularProgressBar)findViewById(R.id.main_current_weight_progress_bar);
         circularProgressBar.setTextColor(ContextCompat.getColor(this,R.color.grey));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setCancelable(false);
                 builder.setTitle(R.string.set_current_weight);
 
                 final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
@@ -127,6 +132,67 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
         this.weightUnitIndex = weightUnitIndex;
 
         updateProgressBar();
+
+        if (desireWeight == 0) {
+            setDesireWeightDialog();
+        }
+    }
+
+    private void setDesireWeightDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.set_desired_weight);
+
+        final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+        final View setCurrentWeightView = inflater.inflate(R.layout.start_dialog, null);
+
+        final View weightUnitView = setCurrentWeightView.findViewById(R.id.start_dialog_weight_unit_view);
+        final AppCompatSpinner spinner = (AppCompatSpinner) weightUnitView.findViewById(R.id.start_dialog_weight_unit_spinner);
+
+        weightUnitView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner.performClick();
+            }
+        });
+
+        /*spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                tempUnitIndex = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });*/
+
+        final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
+        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
+
+        firstNumberPicker.setMinValue(1);
+        firstNumberPicker.setMaxValue(999);
+
+        secondNumberPicker.setMinValue(0);
+        secondNumberPicker.setMaxValue(9);
+
+        builder.setView(setCurrentWeightView);
+
+        builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+
+                int tempUnitIndex = spinner.getSelectedItemPosition();
+                float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), tempUnitIndex);
+
+                SettingsManager.setParams(tempUnitIndex, reconvertedValue);
+
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void updateProgressBar() {

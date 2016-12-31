@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Журнал веса</string>
+
+    <string name="statistics">Статистика</string>
+    <string name="settings">Настройки</string>
+
+    <string name="add">Добавить</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="set">Установить</string>
+
+    <string name="weigh">Взвеситься</string>
+
+
+    <string name="set_desired_weight">Установить желаемый вес</string>
+    <string name="desired_weight">Желаемый вес</string>
+
+    <string name="your_current_weight">Ваш текущий вес</string>
+    <string name="set_weight">Установить вес</string>
+    <string name="set_current_weight">Установить текущий вес</string>
+    <string name="change_weight">Изменить вес</string>
+
+    <string name="remove_message">Вы хотите удалить запись?</string>
+
+    <string name="empty_list_view">У вас нет ни одной записи</string>
+
+    <string name="weight_unit">Еденицы измерения</string>
+    <string name="choose_desire_weight_unit">Выберите предпочтительные еденицы измерения</string>
+
+    <string-array name="weight_units_short_name">
+        <item>кг</item>
+        <item>lb</item>
+    </string-array>
+
+    <string-array name="weight_units">
+        <item>Килограмм</item>
+        <item>Фунт</item>
+    </string-array>
+
+</resources>
