@@ -1,7 +1,5 @@
 package com.greenkey.weighttracker.statistics;
 
-import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,21 +8,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.SettingsManager;
 import com.greenkey.weighttracker.WeightHelper;
-import com.greenkey.weighttracker.WeightRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +34,7 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
             R.drawable.ic_bars_chart
     };
 
-    private TextView goalWeightTextView;
+    private TextView desireWeightTextView;
     private TextView weightUnitTextView;
     //private StatisticsWeightRecordListFragment listFragment;
 
@@ -68,17 +61,18 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         final ViewPager viewPager = (ViewPager) findViewById(R.id.statistics_view_pager);
         viewPager.setAdapter(viewPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.statistics_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
-        goalWeightTextView = (TextView) findViewById(R.id.statistics_goal_weight_text_view);
-        weightUnitTextView = (TextView) findViewById(R.id.statistics_weight_unite_text_view);
+        desireWeightTextView = (TextView) findViewById(R.id.statistics_desire_weight_text_view);
+
+        //weightUnitTextView = (TextView) findViewById(R.id.statistics_weight_unite_text_view);
 
         SettingsManager.subscribe(this);
-
+/*
         final View goalWeightEditImageView = findViewById(R.id.statistics_goal_weight_edit_image_view);
         goalWeightEditImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +124,7 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
                 dialog.show();
             }
         });
+        */
     }
 
     @Override
@@ -139,8 +134,8 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         this.desireWeight = desireWeight;
         this.weightUnitIndex = weightUnitIndex;
 
-        goalWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
-        weightUnitTextView.setText(units[weightUnitIndex]);
+        desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
+        //weightUnitTextView.setText(units[weightUnitIndex]);
     }
 
     @Override

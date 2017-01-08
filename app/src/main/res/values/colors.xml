@@ -5,6 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorPrimaryLight">#729fe3</color>
 
+    <color name="light_grey">#ededed</color>
+    <color name="light_white">#f9f9f9</color>
+
     <color name="black">#000000</color>
 
     <color name="green">#5cab00</color>
@@ -13,8 +16,8 @@
     <color name="reject_red">#E53935</color>
 
     <color name="white">#ffffff</color>
-    <color name="light_white">#f3f3f3</color>
+    <color name="light_white_222">#f3f3f3</color>
 
     <color name="grey">#655f5f</color>
-    <color name="light_grey">#b9b4b4</color>
+    <color name="light_grey_222">#b9b4b4</color>
 </resources>

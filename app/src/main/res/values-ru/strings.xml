@@ -12,17 +12,19 @@
 
     <string name="weigh">Взвеситься</string>
 
+    <string name="sex">Пол</string>
 
     <string name="set_desired_weight">Установить желаемый вес</string>
+    <string name="set_current_weight">Установить текущий вес</string>
+    <string name="set_weight">Установить вес</string>
+
+    <string name="started_weight">Начальный вес</string>
+    <string name="current_weight">Текущий вес</string>
     <string name="desired_weight">Желаемый вес</string>
 
-    <string name="your_current_weight">Ваш текущий вес</string>
-    <string name="set_weight">Установить вес</string>
-    <string name="set_current_weight">Установить текущий вес</string>
     <string name="change_weight">Изменить вес</string>
 
     <string name="remove_message">Вы хотите удалить запись?</string>
-
     <string name="empty_list_view">У вас нет ни одной записи</string>
 
     <string name="weight_unit">Еденицы измерения</string>
