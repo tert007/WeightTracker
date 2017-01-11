@@ -22,13 +22,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.registration.step.RegistrationFirstFragment;
-import com.greenkey.weighttracker.registration.step.RegistrationFourthFragment;
-import com.greenkey.weighttracker.registration.step.RegistrationSecondFragment;
-import com.greenkey.weighttracker.registration.step.RegistrationThirdFragment;
+import com.greenkey.weighttracker.registration.step.RegistrationtSexFragment;
+import com.greenkey.weighttracker.registration.step.RegistrationStartFragment;
+import com.greenkey.weighttracker.registration.step.RegistrationBirthDateFragment;
+import com.greenkey.weighttracker.registration.step.RegistrationTallFragment;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.stepstone.stepper.adapter.AbstractStepAdapter;
@@ -98,13 +97,13 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
         public Fragment createStep(int position) {
             switch (position) {
                 case 0:
-                    return new RegistrationFirstFragment();
+                    return new RegistrationtSexFragment();
                 case 1:
-                    return new RegistrationSecondFragment();
+                    return new RegistrationBirthDateFragment();
                 case 2:
-                    return new RegistrationThirdFragment();
+                    return new RegistrationTallFragment();
                 case 3:
-                    return new RegistrationFourthFragment();
+                    return new RegistrationStartFragment();
                 default:
                     throw new IllegalArgumentException("Unsupported position: " + position);
             }

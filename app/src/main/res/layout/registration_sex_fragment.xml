@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.greenkey.weighttracker.registration.step.RegistrationFirstFragment">
+    tools:context="com.greenkey.weighttracker.registration.step.RegistrationtSexFragment">
 
     <View
         android:layout_width="match_parent"
@@ -11,9 +11,9 @@
         android:layout_weight="1" />
 
     <ImageView
+        android:id="@+id/registration_sex_choose_female"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/registration_sex_choose_female"
         android:layout_weight="1"
         android:src="@drawable/registration_sex_female_icon" />
 
@@ -23,9 +23,9 @@
         android:layout_weight="1" />
 
     <ImageView
+        android:id="@+id/registration_sex_choose_male"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/registration_sex_choose_male"
         android:layout_weight="1"
         android:src="@drawable/registration_sex_male_icon" />
 

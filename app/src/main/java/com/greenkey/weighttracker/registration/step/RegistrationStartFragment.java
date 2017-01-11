@@ -7,22 +7,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.greenkey.weighttracker.R;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
-public class RegistrationFourthFragment extends Fragment  implements Step {
+public class RegistrationStartFragment extends Fragment  implements Step {
 
-    public RegistrationFourthFragment() {
+    public RegistrationStartFragment() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.registration_fourth_fragment, container, false);
+        final View view = inflater.inflate(R.layout.registration_start_weight_fragment, container, false);
         return view;
     }
 

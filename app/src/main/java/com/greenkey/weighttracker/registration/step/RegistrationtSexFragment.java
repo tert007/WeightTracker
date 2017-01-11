@@ -13,18 +13,18 @@ import com.greenkey.weighttracker.R;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
-public class RegistrationFirstFragment extends Fragment  implements Step {
+public class RegistrationtSexFragment extends Fragment  implements Step {
     ImageView sexMaleImageView;
     ImageView sexFemaleImageView;
 
-    public RegistrationFirstFragment() {
+    public RegistrationtSexFragment() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.registration_first_fragment, container, false);
+        final View view = inflater.inflate(R.layout.registration_sex_fragment, container, false);
         sexMaleImageView = (ImageView) view.findViewById(R.id.registration_sex_choose_male);
         sexFemaleImageView = (ImageView) view.findViewById(R.id.registration_sex_choose_female);
 

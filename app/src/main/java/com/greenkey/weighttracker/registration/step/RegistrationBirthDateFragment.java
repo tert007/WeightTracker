@@ -1,34 +1,38 @@
 package com.greenkey.weighttracker.registration.step;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
 import com.greenkey.weighttracker.R;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
-public class RegistrationThirdFragment extends Fragment  implements Step {
+import java.util.Calendar;
 
-    public RegistrationThirdFragment() {
 
-    }
+public class RegistrationBirthDateFragment extends Fragment  implements Step {
+    DatePicker birthDatePicker;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public RegistrationBirthDateFragment() {
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.registration_third_fragment, container, false);
+        final View view = inflater.inflate(R.layout.registration_birth_date_fragment, container, false);
+        birthDatePicker = (DatePicker)view.findViewById(R.id.birth_date_picker);
+        birthDatePicker.updateDate(1990,0,1);
+        birthDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
+        return view;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -42,7 +46,7 @@ public class RegistrationThirdFragment extends Fragment  implements Step {
 
     @Override
     public int getName() {
-        return R.string.tall;
+        return R.string.birth_date;
     }
 
     @Override

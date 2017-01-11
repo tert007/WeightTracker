@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.greenkey.weighttracker.registration.step.RegistrationSecondFragment">
+    tools:context="com.greenkey.weighttracker.registration.step.RegistrationBirthDateFragment">
 
     <DatePicker
         android:id="@+id/birth_date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-    </DatePicker>
+        android:layout_gravity="center"></DatePicker>
+
 </LinearLayout>
