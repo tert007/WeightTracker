@@ -12,19 +12,18 @@
 
     <string name="sex">Sex</string>
 
-    <string name="weigh">Weigh</string>
-
     <string name="set_desired_weight">Set a desired weight</string>
     <string name="desired_weight">Desired weight</string>
 
     <string name="started_weight">Started weight</string>
-    <string name="current_weight">current weight</string>
+    <string name="set_started_weight">Set a started weight</string>
+
+    <string name="current_weight">Current weight</string>
     <string name="set_weight">Set the weight</string>
     <string name="set_current_weight">Set a current weight</string>
     <string name="change_weight">Change the weight</string>
 
     <string name="remove_message">Do you want to remove the record?</string>
-
     <string name="empty_list_view">You don\'t have any records</string>
 
     <string name="weight_unit">Weight unit</string>

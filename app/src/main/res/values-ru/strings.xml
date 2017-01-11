@@ -10,8 +10,6 @@
     <string name="cancel">Отмена</string>
     <string name="set">Установить</string>
 
-    <string name="weigh">Взвеситься</string>
-
     <string name="sex">Пол</string>
 
     <string name="set_desired_weight">Установить желаемый вес</string>
@@ -19,6 +17,8 @@
     <string name="set_weight">Установить вес</string>
 
     <string name="started_weight">Начальный вес</string>
+    <string name="set_started_weight">Установить начальный вес</string>
+
     <string name="current_weight">Текущий вес</string>
     <string name="desired_weight">Желаемый вес</string>
 

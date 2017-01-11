@@ -32,11 +32,20 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
 
     private Realm realm;
 
+    private String[] units;
+
     private CircularProgressBar circularProgressBar;
+
+    private TextView desireWeightTextView;
+    private TextView desireWeightUnitTextView;
 
     private TextView startWeightTextView;
     private TextView lastWeightTextView;
-    private TextView desireWeightTextView;
+    //private TextView desireWeightTextView;
+
+    private TextView startWeightUnitTextView;
+    private TextView lastWeightUnitTextView;
+    //private TextView desireWeightUnitTextView;
 
     private float desireWeight;
     private int weightUnitIndex;
@@ -44,26 +53,33 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
     private WeightRecord lastWeightRecord;
     private WeightRecord firstWeightRecord;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        units = getResources().getStringArray(R.array.weight_units_short_name);
 
         circularProgressBar = (CircularProgressBar)findViewById(R.id.circular_progress_bar);
         circularProgressBar.setProgressWidth(15);
         circularProgressBar.showPrimaryText(true);
         circularProgressBar.showSecondaryText(true);
 
-        startWeightTextView = (TextView) findViewById(R.id.main_start_weight_text_view);
-        lastWeightTextView = (TextView) findViewById(R.id.main_last_weight_text_view);
+        startWeightTextView = (TextView) findViewById(R.id.main_started_weight_text_view);
+        lastWeightTextView = (TextView) findViewById(R.id.main_current_weight_text_view);
         desireWeightTextView = (TextView) findViewById(R.id.main_desire_weight_text_view);
+
+        startWeightUnitTextView = (TextView) findViewById(R.id.main_started_weight_unit_text_view);
+        lastWeightUnitTextView = (TextView) findViewById(R.id.main_current_weight_unit_text_view);
+        desireWeightUnitTextView = (TextView) findViewById(R.id.main_desire_weight_unit_text_view);
+
+        desireWeightTextView = (TextView) findViewById(R.id.main_desire_weight_text_view);
+        desireWeightUnitTextView = (TextView) findViewById(R.id.main_desire_weight_unit_text_view);
+
         //circularProgressBar.setProgressColor(ContextCompat.getColor(this, R.color.reject_red));
         //circularProgressBar.setMaxProgress(4);
         //circularProgressBar.setProgress(0);
-
-
-
-
         //circularProgressBar.setTextColor(ContextCompat.getColor(this,R.color.grey));
 
         circularProgressBar.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
                 final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
                 final View setCurrentWeightView = inflater.inflate(R.layout.set_weight_dialog, null);
 
-                final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
-                final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
+                final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.desire_weight_dialog_first_number_picker);
+                final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.desire_weight_dialog_second_number_pickrer);
 
                 firstNumberPicker.setMinValue(1);
                 firstNumberPicker.setMaxValue(999);
@@ -135,20 +151,18 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-/*
-        final Button updateCurrentWeightButton = (Button) findViewById(R.id.main_update_current_weight_button);
-        updateCurrentWeightButton.setOnClickListener(new View.OnClickListener() {
+
+        final View desireWeightView = findViewById(R.id.main_desire_weight_view);
+        desireWeightView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setCancelable(false);
-                builder.setTitle(R.string.set_current_weight);
 
                 final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-                final View setCurrentWeightView = inflater.inflate(R.layout.set_weight_dialog, null);
+                final View setCurrentWeightView = inflater.inflate(R.layout.desire_weight_dialog, null);
 
-                final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
-                final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
+                final NumberPicker firstNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.desire_weight_dialog_first_number_picker);
+                final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.desire_weight_dialog_second_number_pickrer);
 
                 firstNumberPicker.setMinValue(1);
                 firstNumberPicker.setMaxValue(999);
@@ -156,39 +170,24 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
                 secondNumberPicker.setMinValue(0);
                 secondNumberPicker.setMaxValue(9);
 
-                if (lastWeightRecord != null) {
-                    float convertedValue = WeightHelper.convert(lastWeightRecord.getValue(), weightUnitIndex);
+                final float convertedValue = WeightHelper.convert(desireWeight, weightUnitIndex);
 
-                    int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
-                    int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+                final int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+                final int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
 
-                    firstNumberPicker.setValue(firstPartOfValue);
-                    secondNumberPicker.setValue(secondPartOfValue);
-                }
+                firstNumberPicker.setValue(firstPartOfValue);
+                secondNumberPicker.setValue(secondPartOfValue);
 
                 builder.setView(setCurrentWeightView);
 
                 builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        realm.beginTransaction();
-                        WeightRecord weightRecord = realm.createObject(WeightRecord.class);
 
-                        String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+                        final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
+                        final float reconvertedValue = WeightHelper.reconvert(value, weightUnitIndex);
 
-                        float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), weightUnitIndex);
-                        weightRecord.setValue(reconvertedValue);
-
-                        weightRecord.setDate(System.currentTimeMillis());
-
-                        realm.copyToRealm(weightRecord);
-                        realm.commitTransaction();
-
-                        lastWeightRecord = weightRecord;
-                        if (firstWeightRecord == null) {
-                            firstWeightRecord = weightRecord;
-                        }
-
-                        updateProgressBar();
+                        SettingsManager.setGoalWeight(reconvertedValue);
+                        dialog.dismiss();
                     }
                 });
 
@@ -201,7 +200,59 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
-        });*/
+        });
+
+        final View startedWeightView = findViewById(R.id.main_started_weight_view);
+        startedWeightView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+                final View setCurrentWeightView = inflater.inflate(R.layout.started_weight_dialog, null);
+
+                final NumberPicker firstNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.started_weight_dialog_first_number_picker);
+                final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.started_weight_dialog_second_number_pickrer);
+
+                firstNumberPicker.setMinValue(1);
+                firstNumberPicker.setMaxValue(999);
+
+                secondNumberPicker.setMinValue(0);
+                secondNumberPicker.setMaxValue(9);
+
+                //final float convertedValue = WeightHelper.convert(desireWeight, weightUnitIndex);
+
+                //final int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+                //final int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+
+                //firstNumberPicker.setValue(firstPartOfValue);
+                //secondNumberPicker.setValue(secondPartOfValue);
+
+                builder.setView(setCurrentWeightView);
+
+                builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+/*
+                        final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
+                        final float reconvertedValue = WeightHelper.reconvert(value, weightUnitIndex);
+
+                        SettingsManager.setGoalWeight(reconvertedValue);
+                        */
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
         SettingsManager.subscribe(this);
     }
@@ -215,74 +266,23 @@ public class MainActivity extends AppCompatActivity implements SettingsManager.S
 
         updateProgressBar();
 
-        if (desireWeight == 0) {
-            setDesireWeightDialog();
-        }
-    }
-
-    private void setDesireWeightDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle(R.string.set_desired_weight);
-
-        final LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-        final View setCurrentWeightView = inflater.inflate(R.layout.start_dialog, null);
-
-        final View weightUnitView = setCurrentWeightView.findViewById(R.id.start_dialog_weight_unit_view);
-        final AppCompatSpinner spinner = (AppCompatSpinner) weightUnitView.findViewById(R.id.start_dialog_weight_unit_spinner);
-
-        weightUnitView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner.performClick();
-            }
-        });
-
-        /*spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tempUnitIndex = i;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
-
-        final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
-        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
-
-        firstNumberPicker.setMinValue(1);
-        firstNumberPicker.setMaxValue(999);
-
-        secondNumberPicker.setMinValue(0);
-        secondNumberPicker.setMaxValue(9);
-
-        builder.setView(setCurrentWeightView);
-
-        builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
-
-                int tempUnitIndex = spinner.getSelectedItemPosition();
-                float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), tempUnitIndex);
-
-                SettingsManager.setParams(tempUnitIndex, reconvertedValue);
-
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        //if (desireWeight == 0) {
+        //    setDesireWeightDialog();
+        //}
     }
 
     private void updateProgressBar() {
-        String[] units = getResources().getStringArray(R.array.weight_units_short_name);
 
         desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
+        desireWeightUnitTextView.setText(units[weightUnitIndex]);
+
+
+
+        startWeightUnitTextView.setText(units[weightUnitIndex]);
+        lastWeightUnitTextView.setText(units[weightUnitIndex]);
 
         realm = Realm.getDefaultInstance();
+
 /*
         final RealmResults<WeightRecord> records = realm.where(WeightRecord.class).findAll();
         if ( ! records.isEmpty()) {

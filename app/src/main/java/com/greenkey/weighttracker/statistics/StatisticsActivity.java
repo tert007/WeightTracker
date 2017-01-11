@@ -1,5 +1,6 @@
 package com.greenkey.weighttracker.statistics;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,11 +9,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
@@ -34,8 +39,7 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
             R.drawable.ic_bars_chart
     };
 
-    private TextView desireWeightTextView;
-    private TextView weightUnitTextView;
+    //private TextView weightUnitTextView;
     //private StatisticsWeightRecordListFragment listFragment;
 
     @Override
@@ -53,6 +57,9 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
 
         units = getResources().getStringArray(R.array.weight_units_short_name);
 
+        //desireWeightTextView = (TextView) findViewById(R.id.statistics_desire_weight_text_view);
+        //desireWeightUnitTextView = (TextView) findViewById(R.id.statistics_desire_weight_unit_text_view);
+
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFrag(new StatisticsWeightRecordListFragment(), null);
@@ -67,64 +74,7 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
-        desireWeightTextView = (TextView) findViewById(R.id.statistics_desire_weight_text_view);
-
-        //weightUnitTextView = (TextView) findViewById(R.id.statistics_weight_unite_text_view);
-
         SettingsManager.subscribe(this);
-/*
-        final View goalWeightEditImageView = findViewById(R.id.statistics_goal_weight_edit_image_view);
-        goalWeightEditImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsActivity.this);
-                builder.setTitle(R.string.set_desired_weight);
-
-                final LayoutInflater inflater = LayoutInflater.from(StatisticsActivity.this);
-                final View setCurrentWeightView = inflater.inflate(R.layout.set_weight_dialog, null);
-
-                final NumberPicker firstNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
-                final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
-
-                firstNumberPicker.setMinValue(1);
-                firstNumberPicker.setMaxValue(999);
-
-                secondNumberPicker.setMinValue(0);
-                secondNumberPicker.setMaxValue(9);
-
-                final float convertedValue = WeightHelper.convert(desireWeight, weightUnitIndex);
-
-                final int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
-                final int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
-
-                firstNumberPicker.setValue(firstPartOfValue);
-                secondNumberPicker.setValue(secondPartOfValue);
-
-                builder.setView(setCurrentWeightView);
-
-                builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
-                        final float reconvertedValue = WeightHelper.reconvert(value, weightUnitIndex);
-
-                        SettingsManager.setGoalWeight(reconvertedValue);
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-        */
     }
 
     @Override
@@ -134,7 +84,8 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         this.desireWeight = desireWeight;
         this.weightUnitIndex = weightUnitIndex;
 
-        desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
+        //desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
+        //desireWeightUnitTextView.setText(units[weightUnitIndex]);
         //weightUnitTextView.setText(units[weightUnitIndex]);
     }
 
