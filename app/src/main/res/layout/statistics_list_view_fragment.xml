@@ -8,7 +8,6 @@
 
     <ListView
         android:id="@+id/statistics_list_view"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
@@ -27,10 +26,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="12"
-        android:background="@color/colorPrimaryLight"/>
 </LinearLayout>
 

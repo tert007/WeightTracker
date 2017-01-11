@@ -23,9 +23,6 @@ import com.greenkey.weighttracker.SettingsManager;
 import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 
-import java.util.Collections;
-import java.util.List;
-
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmBaseAdapter;
@@ -203,8 +200,8 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
                     final LayoutInflater inflater = LayoutInflater.from(getActivity());
                     final View setCurrentWeightView = inflater.inflate(R.layout.set_weight_dialog, null);
 
-                    final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_first_number_picker);
-                    final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.set_weight_dialog_second_number_pickrer);
+                    final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.desire_weight_dialog_first_number_picker);
+                    final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.desire_weight_dialog_second_number_pickrer);
 
                     firstNumberPicker.setMinValue(1);
                     firstNumberPicker.setMaxValue(999);

@@ -6,33 +6,48 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-/**
- * Simple single android view component that can be used to showing a round progress bar.
- * It can be customized with size, stroke size, colors and text etc.
- * Progress change will be animated.
- * Created by Kristoffer, http://kmdev.se
- */
+import com.greenkey.weighttracker.R;
+
 public class CircularProgressBar extends View {
 
-    private int mViewWidth;
-    private int mViewHeight;
+    private int viewWidth;
+    private int viewHeight;
 
-    private final float mStartAngle = -90;      // Always start from top (default is: "3 o'clock on a watch.")
-    private float mSweepAngle = 0;              // How long to sweep from mStartAngle
-    private float mMaxSweepAngle = 360;         // Max degrees to sweep = full circle
-    private int mStrokeWidth = 10;              // Width of outline
-    private int mAnimationDuration = 400;       // Animation duration for progress change
-    private int mMaxProgress = 100;             // Max progress to use
-    private boolean mDrawText = true;           // Set to true if progress text should be drawn
+    private final float startAngle = 135;      // Always start from top (0 is: "3 o'clock on a watch, -90 is : 12 o'clock on a watch)
+
+    private float sweepAngle = 0;              // How long to sweep from startAngle
+    private float maxSweepAngle = 270;         // Max degrees to sweep; 360 = full circle
+
+    private int strokeWidth = 10;              // Width of outline
+
+    private int animationDuration = 400;       // Animation duration for progress change
+
+    private int progress = 0;
+    private int maxProgress = 100;             // Max progress to use
+
+
+    private boolean mDrawPrimaryText = false;           // Set to true if progress text should be drawn
+    private boolean mDrawSecondaryText = false;           // Set to true if progress text should be drawn
+
     private boolean mRoundedCorners = true;     // Set to true if rounded corners should be applied to outline ends
-    private int mProgressColor = Color.BLACK;   // Outline color
-    private int mTextColor = Color.BLACK;       // Progress text color
-    private String mainText;
-    private String additionalText;
+
+    private final int defaultArcColor = ContextCompat.getColor(getContext(), R.color.light_grey); //light grey
+    private int progressArcColor = Color.BLACK;                                                   // Outline color
+
+    private int mPrimaryTextColor = Color.BLACK;       //main text color
+    private int mSecondaryTextColor = Color.BLACK;
+
+    private String mPrimaryText;
+    private String mSecondaryText;
+
+    private int primaryTextSize = 50;
+    private int secondaryTextSize = 24;
+
     private final Paint mPaint;                 // Allocate paint outside onDraw to avoid unnecessary object creation
 
     public CircularProgressBar(Context context) {
@@ -45,125 +60,208 @@ public class CircularProgressBar extends View {
 
     public CircularProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
-    public String getMainText() {
-        return mainText;
+    public String getPrimaryText() {
+        return mPrimaryText;
     }
 
-    public void setMainText(String mainText) {
-        this.mainText = mainText;
+    public void setPrimaryText(String mPrimaryText) {
+        this.mPrimaryText = mPrimaryText;
     }
 
-    public String getAdditionalText() {
-        return additionalText;
+    public String getSecondaryText() {
+        return mSecondaryText;
     }
 
-    public void setAdditionalText(String additionalText) {
-        this.additionalText = additionalText;
+    public void setSecondaryText(String mSecondaryText) {
+        this.mSecondaryText = mSecondaryText;
+    }
+
+    public int getPrimaryTextSize() {
+        return primaryTextSize;
+    }
+
+    public void setPrimaryTextSize(int primaryTextSize) {
+        this.primaryTextSize = primaryTextSize;
+    }
+
+    public int getSecondaryTextSize() {
+        return secondaryTextSize;
+    }
+
+    public void setSecondaryTextSize(int secondaryTextSize) {
+        this.secondaryTextSize = secondaryTextSize;
+    }
+
+    public int getMaxProgress() {
+        return maxProgress;
+    }
+
+    public void setMaxProgress(int maxProgress) {
+        this.maxProgress = maxProgress;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        initMeasurments();
-        drawOutlineArc(canvas);
+        initMeasurements();
 
-        if (mDrawText) {
-            drawText(canvas);
-            drawAdditionalText(canvas);
-        }
+        drawDefaultArc(canvas);
+        drawArc(canvas);
+
+        if (mDrawPrimaryText)
+            drawPrimaryText(canvas);
+
+        if (mDrawSecondaryText)
+            drawSecondaryText(canvas);
     }
 
-    private void initMeasurments() {
-        mViewWidth = getWidth();
-        mViewHeight = getHeight();
+    private void initMeasurements() {
+        viewWidth = getWidth();
+        viewHeight = getHeight();
     }
 
-    private void drawOutlineArc(Canvas canvas) {
+    private void drawDefaultArc(Canvas canvas) {
+        final int diameter = Math.min(viewWidth, viewHeight);
 
-        final int diameter = Math.min(mViewWidth, mViewHeight) - (mStrokeWidth * 2);
+        final RectF outerOval = new RectF(strokeWidth, strokeWidth, diameter - strokeWidth, diameter - strokeWidth);
 
-        final RectF outerOval = new RectF(mStrokeWidth, mStrokeWidth, diameter, diameter);
-
-        mPaint.setColor(mProgressColor);
-        mPaint.setStrokeWidth(mStrokeWidth);
+        mPaint.setColor(defaultArcColor);
+        mPaint.setStrokeWidth(strokeWidth);
         mPaint.setAntiAlias(true);
+
         mPaint.setStrokeCap(mRoundedCorners ? Paint.Cap.ROUND : Paint.Cap.BUTT);
         mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawArc(outerOval, mStartAngle, mSweepAngle, false, mPaint);
+
+        canvas.drawArc(outerOval, startAngle, maxSweepAngle, false, mPaint);
     }
 
-    private void drawText(Canvas canvas) {
-        mPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 5f);
-        mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setStrokeWidth(0);
-        mPaint.setColor(mTextColor);
+    private void drawArc(Canvas canvas) {
+        final int diameter = Math.min(viewWidth, viewHeight); //- (strokeWidth * 2);
 
-        // Center text
-        int xPos = (canvas.getWidth() / 2) - mStrokeWidth/2;
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) - 30;
+        final RectF outerOval = new RectF(strokeWidth, strokeWidth, diameter - strokeWidth, diameter - strokeWidth);
 
-        canvas.drawText(mainText, xPos, yPos, mPaint);
+        mPaint.setColor(progressArcColor);
+        mPaint.setStrokeWidth(strokeWidth);
+        mPaint.setAntiAlias(true);
+
+        mPaint.setStrokeCap(mRoundedCorners ? Paint.Cap.ROUND : Paint.Cap.BUTT);
+        mPaint.setStyle(Paint.Style.STROKE);
+
+        canvas.drawArc(outerOval, startAngle, sweepAngle, false, mPaint);
     }
 
-    private void drawAdditionalText(Canvas canvas) {
-        mPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 5f);
+    private void drawPrimaryText(Canvas canvas) {
+        if (mPrimaryText == null )
+            return;
+
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int textSize = (int) (primaryTextSize * scale + 0.5f);
+
+        mPaint.setTextSize(textSize);
         mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setColor(mPrimaryTextColor);
         mPaint.setStrokeWidth(0);
-        mPaint.setColor(mTextColor);
 
         // Center text
-        int xPos = (canvas.getWidth() / 2) - mStrokeWidth/2;
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) + 30;
+        int xPos = (canvas.getWidth() / 2) - strokeWidth /2;
+        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2));
 
-        canvas.drawText(additionalText, xPos, yPos, mPaint);
+        canvas.drawText(mPrimaryText, xPos, yPos, mPaint);
+    }
+
+    private void drawSecondaryText(Canvas canvas) {
+        if (mSecondaryText == null )
+            return;
+
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int textSize = (int) (secondaryTextSize * scale + 0.5f);
+
+        mPaint.setTextSize(textSize);
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setColor(mSecondaryTextColor);
+        mPaint.setStrokeWidth(0);
+
+        // Center text
+        int xPos = (canvas.getWidth() / 2) - strokeWidth / 2;
+        int yPos = canvas.getHeight() - textSize;
+
+        canvas.drawText(mSecondaryText, xPos, yPos, mPaint);
     }
 
     private float calcSweepAngleFromProgress(int progress) {
-        return (mMaxSweepAngle / mMaxProgress) * progress;
+        if (progress == 0)
+            return 1; // Littlest progress
+
+        return (maxSweepAngle / maxProgress) * progress;
     }
 
+    /*
     private int calcProgressFromSweepAngle(float sweepAngle) {
-        return (int) ((sweepAngle * mMaxProgress) / mMaxSweepAngle);
-    }
+        return (int) ((sweepAngle * maxProgress) / maxSweepAngle);
+    }*/
 
     /**
      * Set progress of the circular progress bar.
-     * @param progress progress between 0 and 100.
      */
     public void setProgress(int progress) {
-        ValueAnimator animator = ValueAnimator.ofFloat(mSweepAngle, calcSweepAngleFromProgress(progress));
+        if (progress > maxProgress) {
+            this.progress = maxProgress;
+        } else if(progress < 0) {
+            this.progress = 0;
+        } else {
+            this.progress = progress;
+        }
+
+        ValueAnimator animator = ValueAnimator.ofFloat(sweepAngle, calcSweepAngleFromProgress(this.progress));
         animator.setInterpolator(new DecelerateInterpolator());
-        animator.setDuration(mAnimationDuration);
+        animator.setDuration(animationDuration);
+
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mSweepAngle = (float) valueAnimator.getAnimatedValue();
+                sweepAngle = (float) valueAnimator.getAnimatedValue();
                 invalidate();
             }
         });
+
         animator.start();
     }
 
+    public int getProgress() {
+        return progress;
+    }
+
     public void setProgressColor(int color) {
-        mProgressColor = color;
+        progressArcColor = color;
         invalidate();
     }
 
     public void setProgressWidth(int width) {
-        mStrokeWidth = width;
+        strokeWidth = width;
         invalidate();
     }
 
-    public void setTextColor(int color) {
-        mTextColor = color;
+    public void setPrimaryTextColor(int color) {
+        mPrimaryTextColor = color;
         invalidate();
     }
 
-    public void showProgressText(boolean show) {
-        mDrawText = show;
+    public void SecondaryTextColor(int color) {
+        mSecondaryTextColor = color;
+        invalidate();
+    }
+
+    public void showPrimaryText(boolean show) {
+        mDrawPrimaryText = show;
+        invalidate();
+    }
+
+    public void showSecondaryText(boolean show) {
+        mDrawSecondaryText = show;
         invalidate();
     }
 
