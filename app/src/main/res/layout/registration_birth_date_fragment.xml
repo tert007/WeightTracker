@@ -9,6 +9,7 @@
         android:id="@+id/birth_date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"></DatePicker>
+        android:layout_gravity="center"
+        android:calendarViewShown="false"/>
 
 </LinearLayout>

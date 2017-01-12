@@ -20,4 +20,6 @@
         <item name="colorButtonNormal">@color/green</item>
     </style>
 
+    <style name="Theme.AppCompat.Light.DarkActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar" />
+
 </resources>

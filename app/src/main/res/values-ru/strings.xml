@@ -42,5 +42,7 @@
         <item>Килограмм</item>
         <item>Фунт</item>
     </string-array>
-
+    <string name="sex_error">Пожалуйста, введите свой вес</string>
+    <string name="birth_date_error">Пожалуйста, введите свою дату рождения</string>
+    <string name="tall_error">Пожалуйста, введите свой рост</string>
 </resources>

@@ -12,9 +12,9 @@ import com.greenkey.weighttracker.R;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
-public class RegistrationStartFragment extends Fragment  implements Step {
+public class RegistrationStartWeightFragment extends Fragment  implements Step {
 
-    public RegistrationStartFragment() {
+    public RegistrationStartWeightFragment() {
 
     }
 
@@ -37,7 +37,7 @@ public class RegistrationStartFragment extends Fragment  implements Step {
 
     @Override
     public int getName() {
-        return R.string.weight;
+        return R.string.started_weight;
     }
 
     @Override

@@ -45,7 +45,17 @@
         <item>Pound</item>
     </string-array>
 
+    <string-array name="tall_units">
+        <item>Centimeter</item>
+    </string-array>
+
+    <string-array name="tall_units_short_name">
+        <item>cm</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="sex_error">Please, choose your sex</string>
+    <string name="birth_date_error">Please, choose your birth date</string>
+    <string name="tall_error">Please, choose your tall</string>
 </resources>

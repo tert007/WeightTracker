@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registration_sex_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,7 +14,7 @@
     <ImageView
         android:id="@+id/registration_sex_choose_female"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_weight="1"
         android:src="@drawable/registration_sex_female_icon" />
 
@@ -25,7 +26,7 @@
     <ImageView
         android:id="@+id/registration_sex_choose_male"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_weight="1"
         android:src="@drawable/registration_sex_male_icon" />
 
