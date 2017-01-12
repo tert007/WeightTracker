@@ -1,6 +1,5 @@
 package com.greenkey.weighttracker.statistics;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,26 +8,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.NumberPicker;
-import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.WeightHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsActivity extends AppCompatActivity implements SettingsManager.SettingsObserver {
+public class StatisticsActivity extends AppCompatActivity {
 
+    private float startWeight;
     private float desireWeight;
     private int weightUnitIndex;
 
@@ -74,13 +68,14 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
-        SettingsManager.subscribe(this);
+        //SettingsManager.addOnChangeListener(this);
     }
-
+/*
     @Override
-    public void update(float desireWeight, int weightUnitIndex) {
+    public void onChangeListener(float startWeight, float desireWeight, int weightUnitIndex) {
         Log.d("SETTINGS", "UPDATE_SETTINGS_STATISTICS");
 
+        this.startWeight = startWeight;
         this.desireWeight = desireWeight;
         this.weightUnitIndex = weightUnitIndex;
 
@@ -88,7 +83,7 @@ public class StatisticsActivity extends AppCompatActivity implements SettingsMan
         //desireWeightUnitTextView.setText(units[weightUnitIndex]);
         //weightUnitTextView.setText(units[weightUnitIndex]);
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.statisctics_menu, menu);

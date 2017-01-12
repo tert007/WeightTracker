@@ -16,7 +16,7 @@ public class WeightRecord extends RealmObject {
     private static final SimpleDateFormat simpleDateFormate;
 
     static {
-        simpleDateFormate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        simpleDateFormate = new SimpleDateFormat("dd MMM yyyy H:m", Locale.getDefault());
         simpleDateFormate.setTimeZone(TimeZone.getDefault());
     }
 
