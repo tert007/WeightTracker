@@ -11,7 +11,7 @@
     <TextView
         android:padding="16dp"
 
-        android:text="@string/started_weight"
+        android:text="@string/start_weight"
 
         android:textSize="24sp"
         android:textColor="@color/black"
@@ -28,7 +28,7 @@
     <TextView
         android:padding="16dp"
 
-        android:text="@string/set_started_weight"
+        android:text="@string/set_start_weight"
         android:textSize="16sp"
         android:textColor="@color/grey"
 
@@ -44,7 +44,7 @@
 
         <NumberPicker
             android:layout_gravity="center_horizontal"
-            android:id="@+id/started_weight_dialog_first_number_picker"
+            android:id="@+id/first_number_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -60,7 +60,7 @@
 
         <NumberPicker
             android:layout_gravity="center_horizontal"
-            android:id="@+id/started_weight_dialog_second_number_pickrer"
+            android:id="@+id/second_number_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 

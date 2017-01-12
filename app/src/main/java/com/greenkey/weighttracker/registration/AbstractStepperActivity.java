@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.greenkey.weighttracker.registration;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.main.MainActivity;
 import com.greenkey.weighttracker.registration.step.RegistrationtSexFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationStartFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationBirthDateFragment;
@@ -69,7 +71,8 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
 
     @Override
     public void onCompleted(View completeButton) {
-
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

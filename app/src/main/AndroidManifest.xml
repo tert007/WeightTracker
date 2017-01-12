@@ -9,11 +9,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait">
-
         </activity>
+
         <activity
             android:name=".statistics.StatisticsActivity"
             android:parentActivityName=".main.MainActivity"
@@ -22,6 +23,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
         </activity>
+
         <activity
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".main.MainActivity"
@@ -30,6 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
         </activity>
+
         <activity android:name=".registration.RegistrationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

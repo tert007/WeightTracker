@@ -9,31 +9,42 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="set">Set</string>
-
-    <string name="weigh">Weigh</string>
-
-    <string name="set_desired_weight">Set a desired weight</string>
-    <string name="desired_weight">Desired weight</string>
+    <string name="edit">Edit</string>
 
     <string name="sex">Sex</string>
     <string name="birth_date">Birth date</string>
     <string name="tall">Tall</string>
     <string name="weight">Weight</string>
 
-    <string name="your_current_weight">Your current weight</string>
-    <string name="started_weight">Started weight</string>
-    <string name="set_started_weight">Set a started weight</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="congratulations_description">You can set a new goal</string>
+
+    <string name="set_desired_weight">Set a desired weight</string>
+    <string name="desired_weight">Desired weight</string>
+
+    <string name="start_weight">Started weight</string>
+    <string name="set_start_weight">Set a started weight</string>
 
     <string name="current_weight">Current weight</string>
-    <string name="set_weight">Set the weight</string>
     <string name="set_current_weight">Set a current weight</string>
-    <string name="change_weight">Change the weight</string>
 
-    <string name="remove_message">Do you want to remove the record?</string>
+    <string name="edit_current_weight">Edit a current weight</string>
+    <string name="edit_current_weight_description">Edit a current weight record if you did a mistake</string>
+    <string name="edit_current_weight_error">You don\'t have a current weight to edit</string>
+
+    <string name="edit_weight">Edit the weight</string>
+    <string name="edit_weight_description">Edit the weight record if you did a mistake</string>
+
+    <string name="remove_record">Do you want to remove the record?</string>
     <string name="empty_list_view">You don\'t have any records</string>
     <string name="registration_sex_choose_title">Выбирите пол</string>
     <string name="weight_unit">Weight unit</string>
     <string name="choose_desire_weight_unit">Choose a desire weight unit</string>
+
+    <string-array name="list_item_dialog_types">
+        <item>Edit</item>
+        <item>Remove</item>
+    </string-array>
 
     <string-array name="weight_units_short_name">
         <item>kg</item>

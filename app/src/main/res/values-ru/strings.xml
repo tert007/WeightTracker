@@ -9,29 +9,42 @@
     <string name="remove">Удалить</string>
     <string name="cancel">Отмена</string>
     <string name="set">Установить</string>
+    <string name="edit">Edit</string>
 
     <string name="sex">Пол</string>
     <string name="birth_date">Дата рождения</string>
     <string name="tall">Рост</string>
     <string name="weight">Вес</string>
 
-    <string name="set_desired_weight">Установить желаемый вес</string>
-    <string name="your_current_weight">Ваш текущий вес</string>
-    <string name="set_weight">Установить вес</string>
-    <string name="set_current_weight">Установить текущий вес</string>
-    <string name="started_weight">Начальный вес</string>
-    <string name="set_started_weight">Установить начальный вес</string>
+    <string name="congratulations">Поздравляем!</string>
+    <string name="congratulations_description">Вы можете установить новую цель!</string>
 
     <string name="current_weight">Текущий вес</string>
+    <string name="set_current_weight">Установить текущий вес</string>
+
+    <string name="start_weight">Начальный вес</string>
+    <string name="set_start_weight">Установить начальный вес</string>
+
+    <string name="edit_current_weight">Изменить текущий вес</string>
+    <string name="edit_current_weight_description">Измените текущий вес, если вы ошиблись при его добавлении</string>
+    <string name="edit_current_weight_error">У вас нет текущего веса для редактирования</string>
+
     <string name="desired_weight">Желаемый вес</string>
+    <string name="set_desired_weight">Установить желаемый вес</string>
 
-    <string name="change_weight">Изменить вес</string>
+    <string name="edit_weight">Изменить вес</string>
+    <string name="edit_weight_description">Измените вес, если вы ошиблись при его добавлении</string>
 
-    <string name="remove_message">Вы хотите удалить запись?</string>
+    <string name="remove_record">Вы хотите удалить запись?</string>
     <string name="empty_list_view">У вас нет ни одной записи</string>
 
     <string name="weight_unit">Еденицы измерения</string>
     <string name="choose_desire_weight_unit">Выберите предпочтительные еденицы измерения</string>
+
+    <string-array name="list_item_dialog_types">
+        <item>Изменить</item>
+        <item>Удалить</item>
+    </string-array>
 
     <string-array name="weight_units_short_name">
         <item>кг</item>

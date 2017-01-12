@@ -1,18 +1,22 @@
 package com.greenkey.weighttracker.statistics;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.shapes.RectShape;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -23,6 +27,8 @@ import com.greenkey.weighttracker.SettingsManager;
 import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 
+import java.util.Random;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmBaseAdapter;
@@ -32,10 +38,11 @@ import io.realm.Sort;
 /**
  * Created by Alexander on 28.12.2016.
  */
-public class StatisticsWeightRecordListFragment extends Fragment implements SettingsManager.SettingsObserver {
+public class StatisticsWeightRecordListFragment extends Fragment/* implements SettingsManager.SettingsListener */{
 
-    //WeightListAdapter adapter;
-    ListView listView;
+    private ListView listView;
+
+    private String[] units;
 
     private float desireWeight;
     private int weightUnitIndex;
@@ -48,36 +55,128 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.statistics_list_view_fragment, container, false);
 
-        realm = Realm.getDefaultInstance();
-        realmResults = realm.where(WeightRecord.class).findAll();
+        units = getResources().getStringArray(R.array.weight_units_short_name);
 
-        listView = (ListView) view.findViewById(R.id.statistics_list_view);
+        desireWeight = SettingsManager.getDesireWeight();
+        weightUnitIndex = SettingsManager.getWeightUnitIndex();
+
+        realm = Realm.getDefaultInstance();
+        realmResults = realm.where(WeightRecord.class).findAll().sort("date", Sort.DESCENDING);;
 
         final View emptyView = view.findViewById(R.id.statistics_empty_list_view);
+
+        listView = (ListView) view.findViewById(R.id.statistics_list_view);
         listView.setEmptyView(emptyView);
+
+        listView.setAdapter(new WeightListAdapter(getActivity(), realmResults));
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setItems(R.array.list_item_dialog_types, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                showEditDialog(position);
+                                break;
+                            case 1:
+                                showRemoveDialog(position);
+                                break;
+                        }
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return false;
+            }
+        });
+
 
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void showRemoveDialog(final int itemPosition) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.remove);
 
-        SettingsManager.subscribe(this);
+        builder.setMessage(R.string.remove_record);
+
+        builder.setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                realm.beginTransaction();
+                realmResults.deleteFromRealm(itemPosition);
+                realm.commitTransaction();
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
-    @Override
-    public void update(float desireWeight, int weightUnitIndex) {
-        Log.d("SETTINGS", "UPDATE_SETTINGS_STATISTICS_LIST_VIEW");
+    private void showEditDialog(final int itemPosition) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        this.desireWeight = desireWeight;
-        this.weightUnitIndex = weightUnitIndex;
+        final LayoutInflater inflater = LayoutInflater.from(getActivity());
+        final View setCurrentWeightView = inflater.inflate(R.layout.dialog_edit_weight, null);
 
-        Activity activity = getActivity();
-        if (activity != null) {
-            realmResults = realmResults.sort("date", Sort.DESCENDING);
-            listView.setAdapter(new WeightListAdapter(getActivity(), realmResults));
-        }
+        final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.first_number_picker);
+        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_pickrer);
+
+        firstNumberPicker.setMinValue(1);
+        firstNumberPicker.setMaxValue(999);
+
+        secondNumberPicker.setMinValue(0);
+        secondNumberPicker.setMaxValue(9);
+
+        final WeightRecord weightRecord = realmResults.get(itemPosition);
+
+        float convertedValue = WeightHelper.convert(weightRecord.getValue(), weightUnitIndex);
+
+        int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+        int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+
+        firstNumberPicker.setValue(firstPartOfValue);
+        secondNumberPicker.setValue(secondPartOfValue);
+
+        builder.setView(setCurrentWeightView);
+
+        builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+
+                String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+
+                realm.beginTransaction();
+                float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), weightUnitIndex);
+                weightRecord.setValue(reconvertedValue);
+                realm.commitTransaction();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public class WeightListAdapter extends RealmBaseAdapter<WeightRecord> implements ListAdapter {
@@ -109,13 +208,35 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
                 return convertView;
             }
 
-            final TextView valueTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_value_text_view);
+            final ImageView coloredShape = (ImageView) convertView.findViewById(R.id.statistics_list_view_item_colored_shape_image_view);
+
+            ShapeDrawable shpy = new ShapeDrawable(new RectShape());
+            shpy.setIntrinsicHeight(100);
+            shpy.setIntrinsicWidth(10);
+
+            Random random = new Random();
+
+            if (random.nextBoolean()) {
+                shpy.getPaint().setColor(ContextCompat.getColor(getContext(), R.color.accept_green));
+            } else {
+                shpy.getPaint().setColor(ContextCompat.getColor(getContext(), R.color.reject_red));
+            }
+
+            coloredShape.setImageDrawable(shpy);
+
+            final TextView valueTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_text_view);
             valueTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
+
+            final TextView valueUnitTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_unit_text_view);
+            valueUnitTextView.setText(units[weightUnitIndex]);
 
             final TextView dateTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_date_text_view);
             dateTextView.setText(currentWeightRecord.getDateByString());
 
-            final TextView weightDifferenceTexView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_difference);
+            final TextView weightDifferenceTexView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_difference_text_view);
+
+            //final TextView weightDifferenceUnitTexView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_difference_unit_text_view);
+            //weightDifferenceUnitTexView.setText(units[weightUnitIndex]);
 
             if (position == getCount() - 1) {
                 weightDifferenceTexView.setText(NOT_INITIALIZED_VALUE);
@@ -158,90 +279,6 @@ public class StatisticsWeightRecordListFragment extends Fragment implements Sett
 
                 weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));
             }
-
-            final View remove = convertView.findViewById(R.id.statistics_list_view_item_remove_image_view);
-            remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.remove);
-
-                    builder.setMessage(R.string.remove_message);
-
-                    builder.setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            realm.beginTransaction();
-                            realmResults.deleteFromRealm(position);
-                            realm.commitTransaction();
-
-                            dialog.dismiss();
-                        }
-                    });
-
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
-
-            final View edit = convertView.findViewById(R.id.statistics_list_view_item_edit_image_view);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.set_weight);
-
-                    final LayoutInflater inflater = LayoutInflater.from(getActivity());
-                    final View setCurrentWeightView = inflater.inflate(R.layout.set_weight_dialog, null);
-
-                    final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.desire_weight_dialog_first_number_picker);
-                    final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.desire_weight_dialog_second_number_pickrer);
-
-                    firstNumberPicker.setMinValue(1);
-                    firstNumberPicker.setMaxValue(999);
-
-                    secondNumberPicker.setMinValue(0);
-                    secondNumberPicker.setMaxValue(9);
-
-                    float convertedValue = WeightHelper.convert(currentWeightRecord.getValue(), weightUnitIndex);
-
-                    int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
-                    int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
-
-                    firstNumberPicker.setValue(firstPartOfValue);
-                    secondNumberPicker.setValue(secondPartOfValue);
-
-                    builder.setView(setCurrentWeightView);
-
-                    builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-
-                            String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
-
-                            realm.beginTransaction();
-                            float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), weightUnitIndex);
-                            currentWeightRecord.setValue(reconvertedValue);
-                            realm.commitTransaction();
-                        }
-                    });
-
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
 
             return convertView;
         }

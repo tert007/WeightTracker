@@ -25,11 +25,10 @@ public class CircularProgressBar extends View {
 
     private int strokeWidth = 10;              // Width of outline
 
-    private int animationDuration = 400;       // Animation duration for progress change
+    private int animationDuration = 1000;       // Animation duration for progress change
 
-    private int progress = 0;
-    private int maxProgress = 100;             // Max progress to use
-
+    private float progress = 0f;
+    private float maxProgress = 100f;             // Max progress to use
 
     private boolean mDrawPrimaryText = false;           // Set to true if progress text should be drawn
     private boolean mDrawSecondaryText = false;           // Set to true if progress text should be drawn
@@ -96,11 +95,11 @@ public class CircularProgressBar extends View {
         this.secondaryTextSize = secondaryTextSize;
     }
 
-    public int getMaxProgress() {
+    public float getMaxProgress() {
         return maxProgress;
     }
 
-    public void setMaxProgress(int maxProgress) {
+    public void setMaxProgress(float maxProgress) {
         this.maxProgress = maxProgress;
     }
 
@@ -192,9 +191,9 @@ public class CircularProgressBar extends View {
         canvas.drawText(mSecondaryText, xPos, yPos, mPaint);
     }
 
-    private float calcSweepAngleFromProgress(int progress) {
-        if (progress == 0)
-            return 1; // Littlest progress
+    private float calcSweepAngleFromProgress(float progress) {
+        if (progress == 0f)
+            return 1f; // Littlest progress
 
         return (maxSweepAngle / maxProgress) * progress;
     }
@@ -207,7 +206,7 @@ public class CircularProgressBar extends View {
     /**
      * Set progress of the circular progress bar.
      */
-    public void setProgress(int progress) {
+    public void setProgress(float progress) {
         if (progress > maxProgress) {
             this.progress = maxProgress;
         } else if(progress < 0) {
@@ -231,7 +230,7 @@ public class CircularProgressBar extends View {
         animator.start();
     }
 
-    public int getProgress() {
+    public float getProgress() {
         return progress;
     }
 
