@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.SettingsManager;
 import com.greenkey.weighttracker.main.MainActivity;
 import com.greenkey.weighttracker.registration.step.RegistrationDesireWeightFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationtSexFragment;
@@ -75,6 +76,7 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
 
     @Override
     public void onCompleted(View completeButton) {
+        SettingsManager.registerUser();
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
@@ -110,9 +112,9 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
                 case 2:
                     return new RegistrationTallFragment();
                 case 3:
-                    return new RegistrationDesireWeightFragment();
-                case 4:
                     return new RegistrationStartWeightFragment();
+                case 4:
+                    return new RegistrationDesireWeightFragment();
                 default:
                     throw new IllegalArgumentException("Unsupported position: " + position);
             }

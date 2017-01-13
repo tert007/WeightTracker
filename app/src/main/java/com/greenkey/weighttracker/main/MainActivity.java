@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +22,7 @@ import com.greenkey.weighttracker.SettingsManager;
 import com.greenkey.weighttracker.WeightHelper;
 import com.greenkey.weighttracker.WeightRecord;
 import com.greenkey.weighttracker.app.CircularProgressBar;
+import com.greenkey.weighttracker.registration.RegistrationActivity;
 import com.greenkey.weighttracker.settings.SettingsActivity;
 import com.greenkey.weighttracker.statistics.StatisticsActivity;
 
@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!SettingsManager.isRegister()){
+            Intent intent = new Intent(this,RegistrationActivity.class);
+            startActivity(intent);
+        }
         setContentView(R.layout.main_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
             }
         });
 
-        currentWeight = realm.where(WeightRecord.class).findAll().last();
+        //currentWeight = realm.where(WeightRecord.class).findAll().last();
 
         updateUI();
     }
@@ -140,11 +144,12 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
     @Override
     protected void onResume() {
         super.onResume();
-
-        //if (currentWeight == null) {
+        RealmResults<WeightRecord> recordRealmResults = realm.where(WeightRecord.class).findAll();
+        if(!recordRealmResults.isEmpty()) {
+            //if (currentWeight == null) {
             currentWeight = realm.where(WeightRecord.class).findAll().last();
-        //}
-
+            //}
+        }
         int tempWeightUnitIndex = SettingsManager.getWeightUnitIndex();
 
         if (weightUnitIndex != tempWeightUnitIndex) {
@@ -178,7 +183,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
         final View setCurrentWeightView = inflater.inflate(R.layout.dialog_set_desire_weight, null);
 
         final NumberPicker firstNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.first_number_picker);
-        final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.second_number_pickrer);
+        final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.second_number_picker);
 
         firstNumberPicker.setMinValue(1);
         firstNumberPicker.setMaxValue(999);
@@ -329,7 +334,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
         final View setCurrentWeightView = inflater.inflate(R.layout.dialog_add_new_weight, null);
 
         final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.first_number_picker);
-        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_pickrer);
+        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_picker);
 
         firstNumberPicker.setMinValue(1);
         firstNumberPicker.setMaxValue(999);
@@ -405,7 +410,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
         final View setCurrentWeightView = inflater.inflate(R.layout.dialog_edit_current_weight, null);
 
         final NumberPicker firstNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.first_number_picker);
-        final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.second_number_pickrer);
+        final NumberPicker secondNumberPicker = (NumberPicker) setCurrentWeightView.findViewById(R.id.second_number_picker);
 
         firstNumberPicker.setMinValue(1);
         firstNumberPicker.setMaxValue(999);
@@ -465,6 +470,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
     }
 
     private void updateUI() {
+
         desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
         desireWeightUnitTextView.setText(units[weightUnitIndex]);
 
@@ -484,26 +490,30 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         float currentBalance = 0;
 
-        if (startWeight < desireWeight) {
-            maxProgress = desireWeight - startWeight;
-            progress = currentWeight.getValue() - startWeight;
+        if(currentWeight == null){
+            currentWeightTextView.setText(NOT_INITIALIZED_VALUE);
+        }
+        else {
+            if (startWeight < desireWeight) {
+                maxProgress = desireWeight - startWeight;
+                progress = currentWeight.getValue() - startWeight;
 
-            currentBalance = Math.abs(desireWeight - currentWeight.getValue());
-        } else if (startWeight == desireWeight) {
+                currentBalance = Math.abs(desireWeight - currentWeight.getValue());
+            } else if (startWeight == desireWeight) {
             /*
             if (currentWeight.getValue() == desireWeight) {
                 maxProgress = 1;
                 progress = 1;
             }
             */
-            currentBalance = Math.abs(currentWeight.getValue() - desireWeight);
-        } else if (startWeight > desireWeight) {
-            maxProgress = startWeight - desireWeight;
-            progress = startWeight - currentWeight.getValue();
+                currentBalance = Math.abs(currentWeight.getValue() - desireWeight);
+            } else if (startWeight > desireWeight) {
+                maxProgress = startWeight - desireWeight;
+                progress = startWeight - currentWeight.getValue();
 
-            currentBalance = Math.abs(currentWeight.getValue() - desireWeight);
+                currentBalance = Math.abs(currentWeight.getValue() - desireWeight);
+            }
         }
-
         circularProgressBar.setMaxProgress(maxProgress);
         circularProgressBar.setProgress(progress);
 

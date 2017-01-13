@@ -21,16 +21,19 @@
 
     <string name="current_weight">Текущий вес</string>
     <string name="set_current_weight">Установить текущий вес</string>
+    <string name="current_weight_cut">Текущий</string>
 
     <string name="start_weight">Начальный вес</string>
     <string name="set_start_weight">Установить начальный вес</string>
+    <string name="start_weight_cut">Начальный</string>
+
+    <string name="desired_weight">Желаемый вес</string>
+    <string name="set_desired_weight">Установить желаемый вес</string>
+    <string name="desired_weight_cut">Желаемый</string>
 
     <string name="edit_current_weight">Изменить текущий вес</string>
     <string name="edit_current_weight_description">Измените текущий вес, если вы ошиблись при его добавлении</string>
     <string name="edit_current_weight_error">У вас нет текущего веса для редактирования</string>
-
-    <string name="desired_weight">Желаемый вес</string>
-    <string name="set_desired_weight">Установить желаемый вес</string>
 
     <string name="edit_weight">Изменить вес</string>
     <string name="edit_weight_description">Измените вес, если вы ошиблись при его добавлении</string>
@@ -55,7 +58,10 @@
         <item>Килограмм</item>
         <item>Фунт</item>
     </string-array>
-    <string name="sex_error">Пожалуйста, введите свой вес</string>
+
+    <string name="sex_error">Пожалуйста, введите свой пол</string>
     <string name="birth_date_error">Пожалуйста, введите свою дату рождения</string>
     <string name="tall_error">Пожалуйста, введите свой рост</string>
+    <string name="start_weight_error">Пожалуйста, введите свой текущий вес</string>
+    <string name="desire_weight_error">Пожалуйста, введите свой желаемый вес</string>
 </resources>

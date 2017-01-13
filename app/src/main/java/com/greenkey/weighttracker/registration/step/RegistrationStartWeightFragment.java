@@ -7,12 +7,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.NumberPicker;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.WeightHelper;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
-public class RegistrationStartWeightFragment extends Fragment  implements Step {
+public class RegistrationStartWeightFragment extends Fragment  implements Step, NumberPicker.OnValueChangeListener {
+    public static final float START_WEIGHT_DEFAULT_VALUE = 70;
+    private float startWeight;
+    private int weightUnitIndex;
+    NumberPicker firstNumberPicker;
+    NumberPicker secondNumberPicker;
+    boolean chooseStartWeight = false;
+    String errorMessage;
 
     public RegistrationStartWeightFragment() {
 
@@ -22,6 +32,37 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.registration_start_weight_fragment, container, false);
+
+        firstNumberPicker = (NumberPicker)view.findViewById(R.id.set_weight_dialog_first_number_picker);
+        secondNumberPicker = (NumberPicker)view.findViewById(R.id.set_weight_dialog_second_number_picker);
+
+        firstNumberPicker.setMinValue(1);
+        firstNumberPicker.setMaxValue(999);
+
+        secondNumberPicker.setMinValue(0);
+        secondNumberPicker.setMaxValue(9);
+
+        startWeight = SettingsManager.getStartWeight();
+        weightUnitIndex = SettingsManager.getWeightUnitIndex();
+
+        if(startWeight == 0){
+            startWeight = START_WEIGHT_DEFAULT_VALUE;
+        }
+        else{
+            chooseStartWeight = true;
+        }
+
+        final float convertedValue = WeightHelper.convert(startWeight, weightUnitIndex);
+
+        final int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+        final int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+
+        firstNumberPicker.setValue(firstPartOfValue);
+        secondNumberPicker.setValue(secondPartOfValue);
+
+        firstNumberPicker.setOnValueChangedListener(this);
+        secondNumberPicker.setOnValueChangedListener(this);
+
         return view;
     }
 
@@ -37,12 +78,21 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step {
 
     @Override
     public int getName() {
-        return R.string.started_weight;
+        return R.string.current_weight;
     }
 
     @Override
     public VerificationError verifyStep() {
-        return null;
+        if(!chooseStartWeight){
+            errorMessage = getString(R.string.start_weight_error);
+            return new VerificationError(errorMessage);
+        }
+        else {
+            final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
+            startWeight = WeightHelper.reconvert(value, weightUnitIndex);
+            SettingsManager.setStartWeight(startWeight);
+            return null;
+        }
     }
 
     @Override
@@ -53,5 +103,10 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step {
     @Override
     public void onError(@NonNull VerificationError error) {
 
+    }
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        chooseStartWeight = true;
     }
 }

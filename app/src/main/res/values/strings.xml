@@ -21,16 +21,21 @@
 
     <string name="set_desired_weight">Set a desired weight</string>
     <string name="desired_weight">Desired weight</string>
+    <string name="desired_weight_cut">Desired</string>
 
     <string name="start_weight">Started weight</string>
     <string name="set_start_weight">Set a started weight</string>
+    <string name="start_weight_cut">Started</string>
 
     <string name="current_weight">Current weight</string>
     <string name="set_current_weight">Set a current weight</string>
+    <string name="current_weight_cut">Current</string>
 
     <string name="edit_current_weight">Edit a current weight</string>
     <string name="edit_current_weight_description">Edit a current weight record if you did a mistake</string>
     <string name="edit_current_weight_error">You don\'t have a current weight to edit</string>
+
+
 
     <string name="edit_weight">Edit the weight</string>
     <string name="edit_weight_description">Edit the weight record if you did a mistake</string>
@@ -69,4 +74,6 @@
     <string name="sex_error">Please, choose your sex</string>
     <string name="birth_date_error">Please, choose your birth date</string>
     <string name="tall_error">Please, choose your tall</string>
+    <string name="start_weight_error">Please, choose your curent weight</string>
+    <string name="desire_weight_error">Please, choose your desire weight</string>
 </resources>

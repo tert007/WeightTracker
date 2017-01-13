@@ -5,21 +5,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.SettingsManager;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
 import java.util.Calendar;
-import java.util.Date;
-
-import static android.R.attr.minDate;
 
 
 public class RegistrationBirthDateFragment extends Fragment  implements Step {

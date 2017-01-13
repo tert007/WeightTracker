@@ -3,9 +3,7 @@ package com.greenkey.weighttracker.statistics;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -136,7 +134,7 @@ public class StatisticsWeightRecordListFragment extends Fragment/* implements Se
         final View setCurrentWeightView = inflater.inflate(R.layout.dialog_edit_weight, null);
 
         final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.first_number_picker);
-        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_pickrer);
+        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_picker);
 
         firstNumberPicker.setMinValue(1);
         firstNumberPicker.setMaxValue(999);

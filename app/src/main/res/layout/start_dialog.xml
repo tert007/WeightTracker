@@ -76,7 +76,7 @@
 
         <NumberPicker
             android:layout_gravity="center_horizontal"
-            android:id="@+id/second_number_pickrer"
+            android:id="@+id/second_number_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </NumberPicker>

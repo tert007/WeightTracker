@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import com.greenkey.weighttracker.app.Sex;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +19,11 @@ public class SettingsManager {
 
     private static final String WEIGHT_UNIT_INDEX_KEY = "weight_unit";
     private static final int WEIGHT_UNIT_INDEX_DEFAULT_VALUE = 0;
-    private static int currentWeightUnitIndex;
+    private static int weightUnitIndex;
 
-    private static final String GOAL_WEIGHT_KEY = "goal_weight";
-    private static final float GOAL_WEIGHT_DEFAULT_VALUE = 0;
-    private static float currentGoalWeight;
+    private static final String DESIRE_WEIGHT_KEY = "goal_weight";
+    private static final float DESIRE_WEIGHT_DEFAULT_VALUE = 0;
+    private static float desireWeight;
 
     private static final String SEX_INDEX_KEY = "user_sex";
     private static final String SEX_DEFAULT_VALUE = String.valueOf(Sex.EMPTY);
@@ -39,6 +41,9 @@ public class SettingsManager {
     private static final int TALL_DEFAULT_VALUE = 0;
     private static int userTall;
 
+    private static final String IS_REGISTER_KEY = "user_is_register";
+    private static final boolean IS_REGISTER_DEFAULT_VALUE = false;
+    private static boolean isRegister = false;
 
     /*
     public interface SettingsListener {
@@ -62,9 +67,9 @@ public class SettingsManager {
         }
     }*/
 
-    static {
+    /*static {
         observerList = new ArrayList<>();
-    }
+    }*/
 
     public static void init(Context context) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -75,6 +80,7 @@ public class SettingsManager {
         startWeight = sharedPreferences.getFloat(START_WEIGHT_KEY, START_WEIGHT_DEFAULT_VALUE);
         desireWeight = sharedPreferences.getFloat(DESIRE_WEIGHT_KEY, DESIRE_WEIGHT_DEFAULT_VALUE);
         weightUnitIndex = sharedPreferences.getInt(WEIGHT_UNIT_INDEX_KEY, WEIGHT_UNIT_INDEX_DEFAULT_VALUE);
+        isRegister = sharedPreferences.getBoolean(IS_REGISTER_KEY,IS_REGISTER_DEFAULT_VALUE);
     }
 
     public static void setParams(float startWeightValue, float desireWeightValue) {
@@ -140,6 +146,15 @@ public class SettingsManager {
         startWeight = weight;
         sharedPreferences.edit().putFloat(START_WEIGHT_KEY, weight).apply();
         //informListeners();
+    }
+
+    public static boolean isRegister(){
+        return  isRegister;
+    }
+
+    public static void registerUser(){
+        isRegister = true;
+        sharedPreferences.edit().putBoolean(IS_REGISTER_KEY,isRegister).apply();
     }
 
     public static float getStartWeight() {
