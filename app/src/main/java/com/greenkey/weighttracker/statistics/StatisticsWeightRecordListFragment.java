@@ -21,9 +21,9 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.WeightHelper;
-import com.greenkey.weighttracker.WeightRecord;
+import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
+import com.greenkey.weighttracker.entity.WeightRecord;
 
 import java.util.Random;
 

@@ -27,7 +27,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.app.SettingsManager;
 import com.greenkey.weighttracker.main.MainActivity;
 import com.greenkey.weighttracker.registration.step.RegistrationDesireWeightFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationtSexFragment;
@@ -76,7 +76,8 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
 
     @Override
     public void onCompleted(View completeButton) {
-        SettingsManager.registerUser();
+        SettingsManager.setUserRegistered(true);
+
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }

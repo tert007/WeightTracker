@@ -1,14 +1,11 @@
 package com.greenkey.weighttracker.registration.step;
 
 import android.content.Context;
-import android.icu.math.MathContext;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.app.SettingsManager;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
@@ -26,21 +23,16 @@ public class RegistrationTallFragment extends Fragment implements Step {
     public static final int START_SEEK_BAR_VALUE = 175;
     public static final int MAX_ICON_TALL = 175;
     public DisplayMetrics displayMetrics;
-    public int koefficent;
+    public int coefficient;
 
-    int curentTall;
+    int currentTall;
     ImageView humanImageView;
-    boolean chooseTall = false;
+    boolean isChoseTall = false;
     String errorMessage;
     AppCompatSeekBar heightVerticalSeekBar;
 
     public RegistrationTallFragment() {
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -52,34 +44,34 @@ public class RegistrationTallFragment extends Fragment implements Step {
         final TextView registrationTallTextView = (TextView) view.findViewById(R.id.registration_tall);
 
         displayMetrics = getResources().getDisplayMetrics();
-        koefficent = (int) Math.round(displayMetrics.widthPixels / START_SEEK_BAR_VALUE / 1.5);
+        coefficient = (int) Math.round(displayMetrics.widthPixels / START_SEEK_BAR_VALUE / 1.5);
 
         heightVerticalSeekBar.setMax(MAX_SEEK_BAR_VALUE);
-        humanImageView.setImageResource(getImageForTall(curentTall));
-        curentTall = SettingsManager.getTall();
+        currentTall = SettingsManager.getTall();
 
-        if(curentTall == 0) {
+        if(currentTall == 0) {
             heightVerticalSeekBar.setProgress(START_SEEK_BAR_VALUE);
-            curentTall = START_SEEK_BAR_VALUE;
+            currentTall = START_SEEK_BAR_VALUE;
         }
         else {
-            heightVerticalSeekBar.setProgress(curentTall);
-            chooseTall = true;
+            heightVerticalSeekBar.setProgress(currentTall);
+            isChoseTall = true;
         }
 
-        registrationTallTextView.setText(curentTall + " см");
-        setIconTall(curentTall);
+        registrationTallTextView.setText(currentTall + " см");
+        setIconTall(currentTall);
+        humanImageView.setImageResource(getImageForTall(currentTall));
 
         heightVerticalSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(!chooseTall)
-                    chooseTall = true;
+                if(!isChoseTall)
+                    isChoseTall = true;
 
-                curentTall = progress;
-                registrationTallTextView.setText(curentTall + " см");
-                humanImageView.setImageResource(getImageForTall(curentTall));
-                setIconTall(curentTall);
+                currentTall = progress;
+                registrationTallTextView.setText(currentTall + " см");
+                humanImageView.setImageResource(getImageForTall(currentTall));
+                setIconTall(currentTall);
             }
 
             @Override
@@ -96,13 +88,13 @@ public class RegistrationTallFragment extends Fragment implements Step {
     }
 
     private void setIconTall(int progress){
-        if(curentTall > MAX_ICON_TALL) {
-            humanImageView.getLayoutParams().height = MAX_ICON_TALL * koefficent;
-            humanImageView.getLayoutParams().width = MAX_ICON_TALL * koefficent;
+        if(currentTall > MAX_ICON_TALL) {
+            humanImageView.getLayoutParams().height = MAX_ICON_TALL * coefficient;
+            humanImageView.getLayoutParams().width = MAX_ICON_TALL * coefficient;
         }
         else {
-            humanImageView.getLayoutParams().height = progress * koefficent;
-            humanImageView.getLayoutParams().width = progress * koefficent;
+            humanImageView.getLayoutParams().height = progress * coefficient;
+            humanImageView.getLayoutParams().width = progress * coefficient;
         }
     }
 
@@ -133,7 +125,7 @@ public class RegistrationTallFragment extends Fragment implements Step {
 
     @Override
     public VerificationError verifyStep() {
-        if(!chooseTall) {
+        if(!isChoseTall) {
             errorMessage = getString(R.string.tall_error);
             return new VerificationError(errorMessage);
         }

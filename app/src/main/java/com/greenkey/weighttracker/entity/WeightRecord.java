@@ -1,6 +1,5 @@
-package com.greenkey.weighttracker;
+package com.greenkey.weighttracker.entity;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -16,7 +15,7 @@ public class WeightRecord extends RealmObject {
     private static final SimpleDateFormat simpleDateFormate;
 
     static {
-        simpleDateFormate = new SimpleDateFormat("dd MMM yyyy H:m", Locale.getDefault());
+        simpleDateFormate = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
         simpleDateFormate.setTimeZone(TimeZone.getDefault());
     }
 

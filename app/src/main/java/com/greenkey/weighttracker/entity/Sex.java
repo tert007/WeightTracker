@@ -1,4 +1,4 @@
-package com.greenkey.weighttracker.app;
+package com.greenkey.weighttracker.entity;
 
 /**
  * Created by Vadim on 11.01.2017.

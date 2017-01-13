@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.WeightHelper;
+import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 

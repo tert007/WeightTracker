@@ -1,7 +1,7 @@
 package com.greenkey.weighttracker.registration.step;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,28 +10,33 @@ import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.WeightHelper;
+import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.WeightRecord;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
+import io.realm.Realm;
+
 public class RegistrationStartWeightFragment extends Fragment  implements Step, NumberPicker.OnValueChangeListener {
+
     public static final float START_WEIGHT_DEFAULT_VALUE = 70;
+
+    private Realm realm;
+
     private float startWeight;
     private int weightUnitIndex;
-    NumberPicker firstNumberPicker;
-    NumberPicker secondNumberPicker;
-    boolean chooseStartWeight = false;
-    String errorMessage;
+    private NumberPicker firstNumberPicker;
+    private NumberPicker secondNumberPicker;
+    private boolean isChoseStartWeight = false;
+    private String errorMessage;
 
-    public RegistrationStartWeightFragment() {
-
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.registration_start_weight_fragment, container, false);
+
+        realm = Realm.getDefaultInstance();
 
         firstNumberPicker = (NumberPicker)view.findViewById(R.id.set_weight_dialog_first_number_picker);
         secondNumberPicker = (NumberPicker)view.findViewById(R.id.set_weight_dialog_second_number_picker);
@@ -47,9 +52,8 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step, 
 
         if(startWeight == 0){
             startWeight = START_WEIGHT_DEFAULT_VALUE;
-        }
-        else{
-            chooseStartWeight = true;
+        } else {
+            isChoseStartWeight = true;
         }
 
         final float convertedValue = WeightHelper.convert(startWeight, weightUnitIndex);
@@ -67,23 +71,13 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step, 
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public int getName() {
         return R.string.current_weight;
     }
 
     @Override
     public VerificationError verifyStep() {
-        if(!chooseStartWeight){
+        if(!isChoseStartWeight){
             errorMessage = getString(R.string.start_weight_error);
             return new VerificationError(errorMessage);
         }
@@ -91,6 +85,13 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step, 
             final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
             startWeight = WeightHelper.reconvert(value, weightUnitIndex);
             SettingsManager.setStartWeight(startWeight);
+
+            realm.beginTransaction();
+            WeightRecord weightRecord = realm.createObject(WeightRecord.class);
+            weightRecord.setValue(startWeight);
+            weightRecord.setDate(System.currentTimeMillis());
+            realm.commitTransaction();
+
             return null;
         }
     }
@@ -107,6 +108,12 @@ public class RegistrationStartWeightFragment extends Fragment  implements Step, 
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        chooseStartWeight = true;
+        isChoseStartWeight = true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 }

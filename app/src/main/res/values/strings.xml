@@ -16,6 +16,8 @@
     <string name="tall">Tall</string>
     <string name="weight">Weight</string>
 
+    <string name="circular_progress_bar_description">The weight to the target</string>
+
     <string name="congratulations">Congratulations!</string>
     <string name="congratulations_description">You can set a new goal</string>
 
@@ -34,8 +36,6 @@
     <string name="edit_current_weight">Edit a current weight</string>
     <string name="edit_current_weight_description">Edit a current weight record if you did a mistake</string>
     <string name="edit_current_weight_error">You don\'t have a current weight to edit</string>
-
-
 
     <string name="edit_weight">Edit the weight</string>
     <string name="edit_weight_description">Edit the weight record if you did a mistake</string>

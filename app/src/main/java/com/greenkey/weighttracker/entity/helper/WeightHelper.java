@@ -1,4 +1,4 @@
-package com.greenkey.weighttracker;
+package com.greenkey.weighttracker.entity.helper;
 
 import android.util.Log;
 
@@ -15,9 +15,7 @@ import io.realm.RealmObject;
  */
 public class WeightHelper {
 
-    //public static final WeightUnit[] WEIGHT_UNITS = WeightUnit.values();
-
-    private static final float[] coefficients = {1f, 0.453f};
+    private static final float[] coefficients = {1f, 0.453f };
     private static final DecimalFormat decimalFormat = new DecimalFormat("#0.0");
 
     //Из кг в любой вес

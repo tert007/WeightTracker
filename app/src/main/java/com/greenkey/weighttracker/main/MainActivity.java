@@ -18,11 +18,10 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.WeightHelper;
-import com.greenkey.weighttracker.WeightRecord;
-import com.greenkey.weighttracker.app.CircularProgressBar;
-import com.greenkey.weighttracker.registration.RegistrationActivity;
+import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
+import com.greenkey.weighttracker.entity.WeightRecord;
+import com.greenkey.weighttracker.app.view.CircularProgressBar;
 import com.greenkey.weighttracker.settings.SettingsActivity;
 import com.greenkey.weighttracker.statistics.StatisticsActivity;
 
@@ -59,10 +58,6 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!SettingsManager.isRegister()){
-            Intent intent = new Intent(this,RegistrationActivity.class);
-            startActivity(intent);
-        }
         setContentView(R.layout.main_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -135,46 +130,24 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
                 showSetStartWeightDialog();
             }
         });
-
-        //currentWeight = realm.where(WeightRecord.class).findAll().last();
-
-        updateUI();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        RealmResults<WeightRecord> recordRealmResults = realm.where(WeightRecord.class).findAll();
-        if(!recordRealmResults.isEmpty()) {
-            //if (currentWeight == null) {
-            currentWeight = realm.where(WeightRecord.class).findAll().last();
-            //}
-        }
-        int tempWeightUnitIndex = SettingsManager.getWeightUnitIndex();
 
+        RealmResults<WeightRecord> realmResults = realm.where(WeightRecord.class).findAll();
+        if ( ! realmResults.isEmpty()) {
+            currentWeight = realmResults.last();
+        }
+
+        int tempWeightUnitIndex = SettingsManager.getWeightUnitIndex();
         if (weightUnitIndex != tempWeightUnitIndex) {
             weightUnitIndex = tempWeightUnitIndex;
-            updateUI();
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        currentWeight = null;
-    }
-
-    /*@Override
-    public void onChangeListener(float startWeight, float desireWeight, int weightUnitIndex) {
-        Log.d("onChangeListener", "MAIN");
-
-        this.startWeight = startWeight;
-        this.desireWeight = desireWeight;
-        this.weightUnitIndex = weightUnitIndex;
 
         updateUI();
-    }*/
+    }
 
     private void showSetDesiredWeightDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -374,7 +347,6 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
                 realm.commitTransaction();
 
-                dialog.dismiss();
 
                 if (startWeight < desireWeight) { //Набор веса
                     if (currentWeight.getValue() >= desireWeight) {
@@ -382,7 +354,8 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
                     } else {
                         updateUI();
                     }
-
+                } else if (startWeight == desireWeight) {
+                    updateUI();
                 } else if (startWeight > desireWeight) {
                     if (currentWeight.getValue() <= desireWeight) {
                         showCongratulationsDialog();
@@ -390,6 +363,9 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
                         updateUI();
                     }
                 }
+
+                dialog.dismiss();
+
             }
         });
 
@@ -418,7 +394,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
         secondNumberPicker.setMinValue(0);
         secondNumberPicker.setMaxValue(9);
 
-        if (currentWeight != null) {
+        //if (currentWeight != null) {
             final float convertedValue = WeightHelper.convert(currentWeight.getValue(), weightUnitIndex);
 
             final int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
@@ -426,7 +402,7 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
             firstNumberPicker.setValue(firstPartOfValue);
             secondNumberPicker.setValue(secondPartOfValue);
-        }
+        //}
 
         builder.setView(setCurrentWeightView);
 
@@ -470,7 +446,6 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
     }
 
     private void updateUI() {
-
         desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
         desireWeightUnitTextView.setText(units[weightUnitIndex]);
 
@@ -490,22 +465,16 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         float currentBalance = 0;
 
-        if(currentWeight == null){
-            currentWeightTextView.setText(NOT_INITIALIZED_VALUE);
-        }
-        else {
+        if (currentWeight == null) {
+            circularProgressBar.setPrimaryText(NOT_INITIALIZED_VALUE);
+            circularProgressBar.setSecondaryText(units[weightUnitIndex]);
+        } else {
             if (startWeight < desireWeight) {
                 maxProgress = desireWeight - startWeight;
                 progress = currentWeight.getValue() - startWeight;
 
                 currentBalance = Math.abs(desireWeight - currentWeight.getValue());
             } else if (startWeight == desireWeight) {
-            /*
-            if (currentWeight.getValue() == desireWeight) {
-                maxProgress = 1;
-                progress = 1;
-            }
-            */
                 currentBalance = Math.abs(currentWeight.getValue() - desireWeight);
             } else if (startWeight > desireWeight) {
                 maxProgress = startWeight - desireWeight;
@@ -513,12 +482,13 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
                 currentBalance = Math.abs(currentWeight.getValue() - desireWeight);
             }
-        }
-        circularProgressBar.setMaxProgress(maxProgress);
-        circularProgressBar.setProgress(progress);
 
-        circularProgressBar.setPrimaryText(WeightHelper.convertByString(currentBalance, weightUnitIndex));
-        circularProgressBar.setSecondaryText(units[weightUnitIndex]);
+            circularProgressBar.setMaxProgress(maxProgress);
+            circularProgressBar.setProgress(progress);
+
+            circularProgressBar.setPrimaryText(WeightHelper.convertByString(currentBalance, weightUnitIndex));
+            circularProgressBar.setSecondaryText(units[weightUnitIndex]);
+        }
     }
 
     @Override

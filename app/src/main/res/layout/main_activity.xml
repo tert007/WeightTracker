@@ -28,7 +28,7 @@
             android:orientation="vertical"
 
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/circular_progress_bar_view"
@@ -36,15 +36,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.greenkey.weighttracker.app.CircularProgressBar
+                <com.greenkey.weighttracker.app.view.CircularProgressBar
                     android:id="@+id/circular_progress_bar"
 
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="8dp"
 
                     android:layout_gravity="center_horizontal"
                     android:layout_width="150dp"
                     android:layout_height="150dp" />
+
+                <TextView
+                    android:text="@string/circular_progress_bar_description"
+                    android:textSize="24sp"
+                    android:textColor="@color/grey"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
 

@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.app.SettingsManager;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 

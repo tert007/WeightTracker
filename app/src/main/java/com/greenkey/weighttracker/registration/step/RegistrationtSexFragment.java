@@ -3,7 +3,6 @@ package com.greenkey.weighttracker.registration.step;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
-import com.greenkey.weighttracker.app.Sex;
+import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.Sex;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 

@@ -13,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.greenkey.weighttracker.R;
-import com.greenkey.weighttracker.SettingsManager;
+import com.greenkey.weighttracker.app.SettingsManager;
 
 public class SettingsActivity extends AppCompatActivity {
 

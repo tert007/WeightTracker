@@ -2,8 +2,6 @@ package com.greenkey.weighttracker.app;
 
 import android.app.Application;
 
-import com.greenkey.weighttracker.SettingsManager;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -17,6 +15,8 @@ public class MyApplication extends Application {
 
         Realm.init(this);
         SettingsManager.init(this);
+
+        SettingsManager.setUserRegistered(false);
 
         RealmConfiguration config = new RealmConfiguration
                 .Builder()

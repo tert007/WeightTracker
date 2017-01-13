@@ -1,4 +1,4 @@
-package com.greenkey.weighttracker.app;
+package com.greenkey.weighttracker.app.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
