@@ -1,38 +1,38 @@
 package com.greenkey.weighttracker.statistics;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.NumberPicker;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.entity.WeightRecord;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
+import com.greenkey.weighttracker.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    private float startWeight;
-    private float desireWeight;
-    private int weightUnitIndex;
-
-    private String[] units;
-
     private final static int[] tabIcons = {
             R.drawable.ic_signs,
             R.drawable.ic_bars_chart
     };
-
-    //private TextView weightUnitTextView;
-    //private StatisticsWeightRecordListFragment listFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +47,6 @@ public class StatisticsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        units = getResources().getStringArray(R.array.weight_units_short_name);
-
-        //desireWeightTextView = (TextView) findViewById(R.id.statistics_desire_weight_text_view);
-        //desireWeightUnitTextView = (TextView) findViewById(R.id.statistics_desire_weight_unit_text_view);
-
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFrag(new StatisticsWeightRecordListFragment(), null);
@@ -65,23 +60,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-
-        //SettingsManager.addOnChangeListener(this);
     }
-/*
-    @Override
-    public void onChangeListener(float startWeight, float desireWeight, int weightUnitIndex) {
-        Log.d("SETTINGS", "UPDATE_SETTINGS_STATISTICS");
 
-        this.startWeight = startWeight;
-        this.desireWeight = desireWeight;
-        this.weightUnitIndex = weightUnitIndex;
-
-        //desireWeightTextView.setText(WeightHelper.convertByString(desireWeight, weightUnitIndex));
-        //desireWeightUnitTextView.setText(units[weightUnitIndex]);
-        //weightUnitTextView.setText(units[weightUnitIndex]);
-    }
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.statisctics_menu, menu);

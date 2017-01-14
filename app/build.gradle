@@ -24,9 +24,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
-
     compile 'io.realm:android-adapters:1.4.0'
     compile 'com.stepstone.stepper:material-stepper:1.1.1'
+
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
 
     testCompile 'junit:junit:4.12'
 }

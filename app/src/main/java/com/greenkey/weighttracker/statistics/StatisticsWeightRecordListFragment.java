@@ -2,11 +2,11 @@ package com.greenkey.weighttracker.statistics;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -25,8 +25,6 @@ import com.greenkey.weighttracker.app.SettingsManager;
 import com.greenkey.weighttracker.entity.helper.WeightHelper;
 import com.greenkey.weighttracker.entity.WeightRecord;
 
-import java.util.Random;
-
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmBaseAdapter;
@@ -36,7 +34,7 @@ import io.realm.Sort;
 /**
  * Created by Alexander on 28.12.2016.
  */
-public class StatisticsWeightRecordListFragment extends Fragment/* implements SettingsManager.SettingsListener */{
+public class StatisticsWeightRecordListFragment extends Fragment {
 
     private ListView listView;
 
@@ -60,6 +58,14 @@ public class StatisticsWeightRecordListFragment extends Fragment/* implements Se
 
         realm = Realm.getDefaultInstance();
         realmResults = realm.where(WeightRecord.class).findAll().sort("date", Sort.DESCENDING);;
+
+        final FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.statistics_floating_action_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddNewWeightDialog();
+            }
+        });
 
         final View emptyView = view.findViewById(R.id.statistics_empty_list_view);
 
@@ -207,20 +213,7 @@ public class StatisticsWeightRecordListFragment extends Fragment/* implements Se
             }
 
             final ImageView coloredShape = (ImageView) convertView.findViewById(R.id.statistics_list_view_item_colored_shape_image_view);
-
-            ShapeDrawable shpy = new ShapeDrawable(new RectShape());
-            shpy.setIntrinsicHeight(100);
-            shpy.setIntrinsicWidth(10);
-
-            Random random = new Random();
-
-            if (random.nextBoolean()) {
-                shpy.getPaint().setColor(ContextCompat.getColor(getContext(), R.color.accept_green));
-            } else {
-                shpy.getPaint().setColor(ContextCompat.getColor(getContext(), R.color.reject_red));
-            }
-
-            coloredShape.setImageDrawable(shpy);
+            final GradientDrawable shape = ((GradientDrawable) coloredShape.getBackground());
 
             final TextView valueTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_text_view);
             valueTextView.setText(WeightHelper.convertByString(currentWeightRecord.getValue(), weightUnitIndex));
@@ -229,16 +222,14 @@ public class StatisticsWeightRecordListFragment extends Fragment/* implements Se
             valueUnitTextView.setText(units[weightUnitIndex]);
 
             final TextView dateTextView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_date_text_view);
-            dateTextView.setText(currentWeightRecord.getDateByString());
+            dateTextView.setText(currentWeightRecord.getDateWithTimeByString());
 
             final TextView weightDifferenceTexView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_difference_text_view);
-
-            //final TextView weightDifferenceUnitTexView = (TextView) convertView.findViewById(R.id.statistics_list_view_item_weight_difference_unit_text_view);
-            //weightDifferenceUnitTexView.setText(units[weightUnitIndex]);
 
             if (position == getCount() - 1) {
                 weightDifferenceTexView.setText(NOT_INITIALIZED_VALUE);
                 weightDifferenceTexView.setTextColor(grey);
+                shape.setColor(grey);
             } else {
                 final WeightRecord previousWeightRecord = getItem(position + 1);
 
@@ -249,37 +240,117 @@ public class StatisticsWeightRecordListFragment extends Fragment/* implements Se
 
                 if (weightDifference == 0) {
                     weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));
+                    shape.setColor(grey);
                     weightDifferenceTexView.setTextColor(grey);
+
+                    weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));
                 } else {
 
                     if (desireWeight > currentWeight) {
                         //Нужно скидывать
                         if (previousWeight > currentWeight){
+                            shape.setColor(redColor);
                             weightDifferenceTexView.setTextColor(redColor);
+
+                            String difference = WeightHelper.convertByString(weightDifference, weightUnitIndex);
+                            weightDifferenceTexView.setText(difference);
                         }
 
                         if (previousWeight < currentWeight) {
+
+                            shape.setColor(greenColor);
                             weightDifferenceTexView.setTextColor(greenColor);
+
+                            String difference = '+' + WeightHelper.convertByString(weightDifference, weightUnitIndex);
+                            weightDifferenceTexView.setText(difference);
                         }
                     }
 
                     if (desireWeight < currentWeight) {
                         //Нужно набрать
                         if (previousWeight > currentWeight) {
+                            shape.setColor(greenColor);
                             weightDifferenceTexView.setTextColor(greenColor);
+
+                            String difference = '+' + WeightHelper.convertByString(weightDifference, weightUnitIndex);
+                            weightDifferenceTexView.setText(difference);
                         }
 
                         if (previousWeight < currentWeight){
+                            shape.setColor(redColor);
                             weightDifferenceTexView.setTextColor(redColor);
+
+                            String difference = WeightHelper.convertByString(weightDifference, weightUnitIndex);
+                            weightDifferenceTexView.setText(difference);
                         }
                     }
                 }
-
-                weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));
             }
 
             return convertView;
         }
+    }
+
+    private void showAddNewWeightDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        final LayoutInflater inflater = LayoutInflater.from(getActivity());
+        final View setCurrentWeightView = inflater.inflate(R.layout.dialog_add_new_weight, null);
+
+        final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.first_number_picker);
+        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_picker);
+
+        firstNumberPicker.setMinValue(1);
+        firstNumberPicker.setMaxValue(999);
+
+        secondNumberPicker.setMinValue(0);
+        secondNumberPicker.setMaxValue(9);
+
+        WeightRecord currentWeight = null;
+        if ( ! realmResults.isEmpty()) {
+            currentWeight = realmResults.first();
+        }
+
+        if (currentWeight != null) {
+            float convertedValue = WeightHelper.convert(currentWeight.getValue(), weightUnitIndex);
+
+            int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+            int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+
+            firstNumberPicker.setValue(firstPartOfValue);
+            secondNumberPicker.setValue(secondPartOfValue);
+        }
+
+        builder.setView(setCurrentWeightView);
+
+        builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                realm.beginTransaction();
+
+                WeightRecord weightRecord = realm.createObject(WeightRecord.class);
+
+                String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+
+                float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), weightUnitIndex);
+
+                weightRecord.setValue(reconvertedValue);
+                weightRecord.setDate(System.currentTimeMillis());
+
+                realm.copyToRealm(weightRecord);
+                realm.commitTransaction();
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

@@ -17,6 +17,7 @@
 
     <ImageView
         android:id="@+id/statistics_list_view_item_colored_shape_image_view"
+        android:background="@drawable/statistics_list_view_item_rectangle"
         android:layout_width="10dp"
         android:layout_height="match_parent" />
 

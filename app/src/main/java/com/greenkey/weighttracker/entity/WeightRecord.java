@@ -34,7 +34,7 @@ public class WeightRecord extends RealmObject {
         return date;
     }
 
-    public String getDateByString() {
+    public String getDateWithTimeByString() {
         return simpleDateFormate.format(new Date(this.date));
     }
 
