@@ -16,7 +16,7 @@ public class MyApplication extends Application {
         Realm.init(this);
         SettingsManager.init(this);
 
-        SettingsManager.setUserRegistered(false);
+        //SettingsManager.setUserRegistered(false);
 
         RealmConfiguration config = new RealmConfiguration
                 .Builder()

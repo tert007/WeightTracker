@@ -14,30 +14,43 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.app.SettingsManager;
 import com.greenkey.weighttracker.entity.WeightRecord;
 import com.greenkey.weighttracker.entity.helper.WeightHelper;
-import com.greenkey.weighttracker.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsActivity extends AppCompatActivity {
+import io.realm.Realm;
+import io.realm.RealmResults;
+
+public class StatisticsActivity extends AppCompatActivity implements OnDataChangedListener, UpdateListener {
+
+    List<OnDataChangedListener> listeners = new ArrayList<>();
 
     private final static int[] tabIcons = {
             R.drawable.ic_signs,
             R.drawable.ic_bars_chart
     };
 
+    private int weightUnitIndex;
+
+    private Realm realm;
+    private RealmResults<WeightRecord> realmResults;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_activity);
+
+        weightUnitIndex = SettingsManager.getWeightUnitIndex();
+
+        realm = Realm.getDefaultInstance();
+        realmResults = realm.where(WeightRecord.class).findAll();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -47,9 +60,15 @@ public class StatisticsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        final FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.statistics_floating_action_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddNewWeightDialog();
+            }
+        });
 
-        viewPagerAdapter.notifyDataSetChanged();
+        final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFrag(new StatisticsWeightRecordListFragment(), null);
         viewPagerAdapter.addFrag(new StatisticsChartFragment(), null);
@@ -64,7 +83,7 @@ public class StatisticsActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
 
@@ -91,5 +110,100 @@ public class StatisticsActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return fragmentTitleList.get(position);
         }
+    }
+
+    private void showAddNewWeightDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsActivity.this);
+
+        final LayoutInflater inflater = LayoutInflater.from(StatisticsActivity.this);
+        final View setCurrentWeightView = inflater.inflate(R.layout.dialog_add_new_weight, null);
+
+        final NumberPicker firstNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.first_number_picker);
+        final NumberPicker secondNumberPicker = (NumberPicker)setCurrentWeightView.findViewById(R.id.second_number_picker);
+
+        firstNumberPicker.setMinValue(1);
+        firstNumberPicker.setMaxValue(999);
+
+        secondNumberPicker.setMinValue(0);
+        secondNumberPicker.setMaxValue(9);
+
+        WeightRecord currentWeight = null;
+        if ( ! realmResults.isEmpty()) {
+            currentWeight = realmResults.first();
+        }
+
+        if (currentWeight != null) {
+            float convertedValue = WeightHelper.convert(currentWeight.getValue(), weightUnitIndex);
+
+            int firstPartOfValue = WeightHelper.getFistPartOfValue(convertedValue);
+            int secondPartOfValue = WeightHelper.getSecondPartOfValue(convertedValue);
+
+            firstNumberPicker.setValue(firstPartOfValue);
+            secondNumberPicker.setValue(secondPartOfValue);
+        }
+
+        builder.setView(setCurrentWeightView);
+
+        builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                realm.beginTransaction();
+
+                WeightRecord weightRecord = realm.createObject(WeightRecord.class);
+
+                String value = firstNumberPicker.getValue() + "." + secondNumberPicker.getValue();
+
+                float reconvertedValue = WeightHelper.reconvert(Float.valueOf(value), weightUnitIndex);
+
+                weightRecord.setValue(reconvertedValue);
+                weightRecord.setDate(System.currentTimeMillis());
+
+                realm.copyToRealm(weightRecord);
+                realm.commitTransaction();
+
+                notifyListeners(realmResults);
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /*
+      Обзваниваем всех подписчиков
+    */
+    private void notifyListeners(RealmResults<WeightRecord> realmResults) {
+        for (OnDataChangedListener listener : listeners) {
+            if (listener == null) {
+                continue;
+            }
+
+            listener.onDataChangedListener(realmResults);
+        }
+    }
+
+    /*
+       Фрагмент присылает обновления нам, а мы уже всем подписчикам
+    */
+    @Override
+    public void onDataChangedListener(RealmResults<WeightRecord> realmResults) {
+        this.realmResults = realmResults;
+        notifyListeners(realmResults);
+    }
+
+    /*
+        Подписки всех фрагметов
+    */
+    @Override
+    public void addOnDataChangeListener(OnDataChangedListener listener) {
+        listener.onDataChangedListener(realmResults);
+        listeners.add(listener);
     }
 }
