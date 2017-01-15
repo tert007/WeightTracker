@@ -14,8 +14,14 @@ import android.widget.ImageView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.Unit;
+import com.greenkey.weighttracker.entity.helper.TallHelper;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
+import com.stepstone.stepper.VerificationError;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private Unit unit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,61 +36,47 @@ public class SettingsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final View weightUnitView = findViewById(R.id.settings_weight_unit_view);
-        final AppCompatSpinner weightUnitspinner = (AppCompatSpinner) weightUnitView.findViewById(R.id.settings_weight_unit_spinner);
+        final View unitSystemView = findViewById(R.id.settings_unit_system_view);
+        final ImageView unitSystemImageView = (ImageView) unitSystemView.findViewById(R.id.settings_unit_system_image_view);
 
-        weightUnitspinner.setSelection(SettingsManager.getWeightUnitIndex());
+        unit = SettingsManager.getUnit();
 
-        weightUnitView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                weightUnitspinner.performClick();
-            }
-        });
-
-        weightUnitspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                SettingsManager.setWeightUnitIndex(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        final View sexView = findViewById(R.id.settings_sex_view);
-        final ImageView sexImageView = (ImageView) sexView.findViewById(R.id.settings_sex_image_view);
-
-        final Drawable maleIcon = ContextCompat.getDrawable(this, R.drawable.settings_sex_male_icon);
-        final Drawable femaleIcon = ContextCompat.getDrawable(this, R.drawable.settings_sex_female_icon);
-
-        final boolean isMale = true;
-
-        if (isMale) {
-            sexImageView.setImageDrawable(maleIcon);
-        } else {
-            sexImageView.setImageDrawable(femaleIcon);
+        switch (unit) {
+            case ENGLISH:
+                unitSystemImageView.setImageResource(R.drawable.settings_unit_british_sytem_icon);
+                break;
+            case METRIC:
+                unitSystemImageView.setImageResource(R.drawable.settings_unit_metric_system_icon);
+                break;
         }
 
-        sexView.setOnClickListener(new View.OnClickListener() {
-
-            private boolean isMal = isMale;
+        unitSystemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                isMal = !isMal;
+                if (unit == Unit.ENGLISH) {
+                    unit = Unit.METRIC;
 
-                if (isMal) {
-                    sexImageView.setImageDrawable(maleIcon);
+                    unitSystemImageView.setImageResource(R.drawable.settings_unit_metric_system_icon);
                 } else {
-                    sexImageView.setImageDrawable(femaleIcon);
+                    unit = Unit.ENGLISH;
+
+                    unitSystemImageView.setImageResource(R.drawable.settings_unit_british_sytem_icon);
                 }
 
-                //SettingsMenager.setIsMale (isMal)
+                switch (unit) {
+                    case ENGLISH:
+                        SettingsManager.setUnit(unit);
+                        SettingsManager.setWeightUnitIndex(WeightHelper.ENGLISH_SYSTEM_INDEX);
+                        SettingsManager.setTallUnitIndex(TallHelper.ENGLISH_SYSTEM_INDEX);
+                        break;
+                    case METRIC:
+                        SettingsManager.setUnit(unit);
+                        SettingsManager.setWeightUnitIndex(WeightHelper.METRIC_SYSTEM_INDEX);
+                        SettingsManager.setTallUnitIndex(TallHelper.METRIC_SYSTEM_INDEX);
+                        break;
+                }
             }
         });
     }
-
 }

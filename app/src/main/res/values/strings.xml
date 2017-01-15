@@ -48,6 +48,8 @@
 
     <string name="unit_system">Unit system</string>
 
+    <string name="settings_unit_system_description">Click to change unit system</string>
+
     <string name="metric_system">Metric system</string>
     <string name="english_system">English system</string>
 

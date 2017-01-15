@@ -102,6 +102,8 @@ public class SettingsManager {
     public static void setUnit(Unit unit) {
         SettingsManager.unit = unit;
         sharedPreferences.edit().putString(UNIT_KEY, unit.toString()).apply();
+
+
     }
 
     public static void setBirthDate(long birthDate){

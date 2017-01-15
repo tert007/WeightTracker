@@ -18,6 +18,8 @@
 
     <string name="unit_system">Единицы измерения</string>
 
+    <string name="settings_unit_system_description">Нажмите, чтобы поменять единицы измерения</string>
+
     <string name="circular_progress_bar_description">Вес к цели</string>
 
     <string name="congratulations">Поздравляем!</string>
