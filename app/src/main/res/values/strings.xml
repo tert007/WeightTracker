@@ -46,6 +46,16 @@
     <string name="weight_unit">Weight unit</string>
     <string name="choose_desire_weight_unit">Choose a desire weight unit</string>
 
+    <string name="unit_system">Unit system</string>
+
+    <string name="metric_system">Metric system</string>
+    <string name="english_system">English system</string>
+
+    <string name="metric_height_unit">centimeter (cm)</string>
+    <string name="metric_weight_unit">kilogram (kg)</string>
+    <string name="english_height_unit">foot/inch (ft/in)</string>
+    <string name="english_weight_unit">pound (lb)</string>
+
     <string-array name="list_item_dialog_types">
         <item>Edit</item>
         <item>Remove</item>
@@ -63,17 +73,18 @@
 
     <string-array name="tall_units">
         <item>Centimeter</item>
+        <item>Foot/Inch</item>
     </string-array>
 
     <string-array name="tall_units_short_name">
         <item>cm</item>
+        <item>ft/in</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sex_error">Please, choose your sex</string>
     <string name="birth_date_error">Please, choose your birth date</string>
+    <string name="unit_system_error">Please, choose your unit system</string>
     <string name="tall_error">Please, choose your tall</string>
-    <string name="start_weight_error">Please, choose your curent weight</string>
+    <string name="start_weight_error">Please, choose your current weight</string>
     <string name="desire_weight_error">Please, choose your desire weight</string>
 </resources>

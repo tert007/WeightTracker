@@ -190,12 +190,14 @@ public class StatisticsWeightRecordListFragment extends Fragment {
         private final int greenColor;
         private final int redColor;
         private final int grey;
+        private final int lightGrey;
 
         public WeightListAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<WeightRecord> data) {
             super(context, data);
 
             this.greenColor = ContextCompat.getColor(context, R.color.accept_green);
             this.redColor = ContextCompat.getColor(context, R.color.reject_red);
+            this.lightGrey = ContextCompat.getColor(context, R.color.light_grey);
             this.grey = ContextCompat.getColor(context, R.color.grey);
         }
 
@@ -229,7 +231,7 @@ public class StatisticsWeightRecordListFragment extends Fragment {
             if (position == getCount() - 1) {
                 weightDifferenceTexView.setText(NOT_INITIALIZED_VALUE);
                 weightDifferenceTexView.setTextColor(grey);
-                shape.setColor(grey);
+                shape.setColor(lightGrey);
             } else {
                 final WeightRecord previousWeightRecord = getItem(position + 1);
 
@@ -240,7 +242,7 @@ public class StatisticsWeightRecordListFragment extends Fragment {
 
                 if (weightDifference == 0) {
                     weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));
-                    shape.setColor(grey);
+                    shape.setColor(lightGrey);
                     weightDifferenceTexView.setTextColor(grey);
 
                     weightDifferenceTexView.setText(WeightHelper.convertByString(weightDifference, weightUnitIndex));

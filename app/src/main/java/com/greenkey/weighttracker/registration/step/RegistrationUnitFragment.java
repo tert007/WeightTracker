@@ -1,91 +1,97 @@
 package com.greenkey.weighttracker.registration.step;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.Unit;
+import com.greenkey.weighttracker.entity.helper.TallHelper;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RegistrationUnitFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RegistrationUnitFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegistrationUnitFragment extends Fragment implements Step {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private View englishSystemView;
+    private View metricSystemView;
+    private Unit unit;
 
-    private OnFragmentInteractionListener mListener;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.registration_unit_fragment, container, false);
 
-    public RegistrationUnitFragment() {
-        // Required empty public constructor
-    }
+        englishSystemView = view.findViewById(R.id.registration_unit_english_system_view);
+        metricSystemView = view.findViewById(R.id.registration_unit_metric_system_view);
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationUnitFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegistrationUnitFragment newInstance(String param1, String param2) {
-        RegistrationUnitFragment fragment = new RegistrationUnitFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        unit = SettingsManager.getUnit();
+
+        englishSystemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unit = Unit.ENGLISH;
+
+                metricSystemView.setBackgroundResource(R.drawable.card_background);
+                englishSystemView.setBackgroundResource(R.drawable.card_background_registration_selected);
+            }
+        });
+
+        metricSystemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unit = Unit.METRIC;
+
+                englishSystemView.setBackgroundResource(R.drawable.card_background);
+                metricSystemView.setBackgroundResource(R.drawable.card_background_registration_selected);
+            }
+        });
+
+        return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public void onResume() {
+        super.onResume();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.registration_unit_fragment, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if (unit == Unit.ENGLISH) {
+            englishSystemView.performClick();
+        } else if (unit == Unit.METRIC) {
+            metricSystemView.performClick();
         }
     }
 
     @Override
     public int getName() {
-        return R.string.app_name;
+        return R.string.unit_system;
     }
 
     @Override
     public VerificationError verifyStep() {
-        return null;
+        switch (unit) {
+            case EMPTY :
+                return new VerificationError(getString(R.string.unit_system_error));
+            case ENGLISH:
+                SettingsManager.setUnit(unit);
+                SettingsManager.setWeightUnitIndex(WeightHelper.ENGLISH_SYSTEM_INDEX);
+                SettingsManager.setTallUnitIndex(TallHelper.ENGLISH_SYSTEM_INDEX);
+
+
+                return null;
+            case METRIC:
+                SettingsManager.setUnit(unit);
+                SettingsManager.setWeightUnitIndex(WeightHelper.METRIC_SYSTEM_INDEX);
+                SettingsManager.setTallUnitIndex(TallHelper.METRIC_SYSTEM_INDEX);
+
+
+                return null;
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -96,20 +102,5 @@ public class RegistrationUnitFragment extends Fragment implements Step {
     @Override
     public void onError(@NonNull VerificationError error) {
 
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

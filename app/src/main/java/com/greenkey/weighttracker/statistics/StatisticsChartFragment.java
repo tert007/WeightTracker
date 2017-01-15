@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.greenkey.weighttracker.R;
+import com.greenkey.weighttracker.app.SettingsManager;
 import com.greenkey.weighttracker.entity.WeightRecord;
+import com.greenkey.weighttracker.entity.helper.WeightHelper;
 
 import org.eazegraph.lib.charts.BarChart;
 import org.eazegraph.lib.charts.ValueLineChart;
@@ -36,11 +38,14 @@ import io.realm.Sort;
  */
 public class StatisticsChartFragment extends Fragment {
 
+    private int weightIndex;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.statistics_chart_fragment, container, false);
+
+        weightIndex = SettingsManager.getWeightUnitIndex();
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults realmResults = realm.where(WeightRecord.class).findAll().sort("date", Sort.ASCENDING);
@@ -55,9 +60,10 @@ public class StatisticsChartFragment extends Fragment {
 
         while (iterator.hasNext()) {
             WeightRecord weightRecord = (WeightRecord) iterator.next();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM",Locale.getDefault());
-            series.addPoint(new ValueLinePoint(simpleDateFormat.format(weightRecord.getDate()), weightRecord.getValue()));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
+            series.addPoint(new ValueLinePoint(simpleDateFormat.format(weightRecord.getDate()), WeightHelper.convert(weightRecord.getValue(), weightIndex)));
         }
+
         ValueLineChart mCubicValueLineChart = (ValueLineChart) view.findViewById(R.id.chart);
         mCubicValueLineChart.addSeries(series);
         mCubicValueLineChart.startAnimation();

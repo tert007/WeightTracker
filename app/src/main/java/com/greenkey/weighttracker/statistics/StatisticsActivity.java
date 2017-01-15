@@ -49,6 +49,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+        viewPagerAdapter.notifyDataSetChanged();
+
         viewPagerAdapter.addFrag(new StatisticsWeightRecordListFragment(), null);
         viewPagerAdapter.addFrag(new StatisticsChartFragment(), null);
 
@@ -60,24 +62,6 @@ public class StatisticsActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.statisctics_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        /*switch (item.getItemId()) {
-            case R.id.add: {
-
-            }
-            return true;
-            default:*/
-                return super.onOptionsItemSelected(item);
-        //}
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -81,6 +81,8 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
 
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
+
+        finish();
     }
 
     @Override
@@ -106,13 +108,14 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
 
         @Override
         public Fragment createStep(int position) {
+
             switch (position) {
                 case 0:
-                    return new RegistrationtSexFragment();
-                case 1:
-                    return new RegistrationBirthDateFragment();
-                case 2:
                     return new RegistrationUnitFragment();
+                case 1:
+                    return new RegistrationtSexFragment();
+                case 2:
+                    return new RegistrationBirthDateFragment();
                 case 3:
                     return new RegistrationTallFragment();
                 case 4:
@@ -126,7 +129,7 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
 
         @Override
         public int getCount() {
-            return 5;
+            return 6;
         }
     }
 

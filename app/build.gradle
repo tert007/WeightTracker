@@ -27,7 +27,8 @@ dependencies {
     compile 'io.realm:android-adapters:1.4.0'
     compile 'com.stepstone.stepper:material-stepper:1.1.1'
 
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+    compile 'com.github.blackfizz:eazegraph:1.2.2@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
 
     testCompile 'junit:junit:4.12'
 }

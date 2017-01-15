@@ -15,16 +15,19 @@ import io.realm.RealmObject;
  */
 public class WeightHelper {
 
-    private static final float[] coefficients = {1f, 0.453f };
+    public static final int METRIC_SYSTEM_INDEX = 0;
+    public static final int ENGLISH_SYSTEM_INDEX = 1;
+
+    private static final float[] coefficients = {1f, 0.4536f };
     private static final DecimalFormat decimalFormat = new DecimalFormat("#0.0");
 
     //Из кг в любой вес
-    public static float convert(float value, int targetWeightUnitIndex) {
-        return round(value / coefficients[targetWeightUnitIndex], 1);
+    public static float convert(float valueKg, int targetWeightUnitIndex) {
+        return round(valueKg / coefficients[targetWeightUnitIndex], 1);
     }
 
-    public static String convertByString(float value, int targetWeightUnitIndex) {
-        return decimalFormat.format(convert(value, targetWeightUnitIndex));
+    public static String convertByString(float valueKg, int targetWeightUnitIndex) {
+        return decimalFormat.format(convert(valueKg, targetWeightUnitIndex));
     }
 
     //Из любого веса в кг

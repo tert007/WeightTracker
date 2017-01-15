@@ -3,9 +3,11 @@ package com.greenkey.weighttracker.registration.step;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,39 +17,54 @@ import android.widget.TextView;
 
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.app.SettingsManager;
+import com.greenkey.weighttracker.entity.helper.TallHelper;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
 public class RegistrationTallFragment extends Fragment implements Step {
-    public static final int MAX_SEEK_BAR_VALUE = 250;
-    public static final int START_SEEK_BAR_VALUE = 175;
-    public static final int MAX_ICON_TALL = 175;
-    public DisplayMetrics displayMetrics;
-    public int coefficient;
+    private static final int MAX_SEEK_BAR_VALUE = 250;
+    private static final int START_SEEK_BAR_VALUE = 175;
+    private static final int MAX_ICON_TALL = 175;
+    private DisplayMetrics displayMetrics;
+    private int coefficient;
 
-    int currentTall;
-    ImageView humanImageView;
-    boolean isChoseTall = false;
-    String errorMessage;
-    AppCompatSeekBar heightVerticalSeekBar;
+    private int currentTall;
+    private int tallUnitIndex;
+    private String[] units;
 
-    public RegistrationTallFragment() {
+    private TextView tallTextView;
+    private TextView tallUnitTextView;
+
+    private ImageView humanImageView;
+    private boolean isChoseTall = false;
+    private String errorMessage;
+    private AppCompatSeekBar heightVerticalSeekBar;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        units = getResources().getStringArray(R.array.tall_units_short_name);
+
+        currentTall = SettingsManager.getTall();
+        tallUnitIndex = SettingsManager.getTallUnitIndex();
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+
+        currentTall = SettingsManager.getTall();
+        tallUnitIndex = SettingsManager.getTallUnitIndex();
+
         final View view = inflater.inflate(R.layout.registration_tall_fragment, container, false);
+
         humanImageView = (ImageView) view.findViewById(R.id.human_image_view);
         heightVerticalSeekBar = (AppCompatSeekBar) view.findViewById(R.id.height_vertical_seek_bar);
-        final TextView registrationTallTextView = (TextView) view.findViewById(R.id.registration_tall);
 
         displayMetrics = getResources().getDisplayMetrics();
         coefficient = (int) Math.round(displayMetrics.widthPixels / START_SEEK_BAR_VALUE / 1.5);
 
         heightVerticalSeekBar.setMax(MAX_SEEK_BAR_VALUE);
-        currentTall = SettingsManager.getTall();
 
         if(currentTall == 0) {
             heightVerticalSeekBar.setProgress(START_SEEK_BAR_VALUE);
@@ -58,7 +75,26 @@ public class RegistrationTallFragment extends Fragment implements Step {
             isChoseTall = true;
         }
 
-        registrationTallTextView.setText(currentTall + " см");
+        tallTextView = (TextView) view.findViewById(R.id.registration_tall_text_view);
+        tallTextView.setText(TallHelper.convertToUnitSystem(currentTall, tallUnitIndex));
+
+        tallUnitTextView = (TextView) view.findViewById(R.id.registration_tall_unit_text_view);
+
+
+        if (tallUnitIndex == 0) {
+            tallUnitTextView.setVisibility(View.VISIBLE);
+            tallUnitTextView.setText(units[tallUnitIndex]);
+        } else {
+            tallUnitTextView.setVisibility(View.GONE); //Дюймы и футы и так черточками обозначаются, не нужно доп. писать
+        }
+
+        if (tallUnitIndex == 0) {
+            tallUnitTextView.setVisibility(View.VISIBLE);
+            tallUnitTextView.setText(units[tallUnitIndex]);
+        } else {
+            tallUnitTextView.setVisibility(View.GONE); //Дюймы и футы и так черточками обозначаются, не нужно доп. писать
+        }
+
         setIconTall(currentTall);
         humanImageView.setImageResource(getImageForTall(currentTall));
 
@@ -69,7 +105,8 @@ public class RegistrationTallFragment extends Fragment implements Step {
                     isChoseTall = true;
 
                 currentTall = progress;
-                registrationTallTextView.setText(currentTall + " см");
+
+                tallTextView.setText(TallHelper.convertToUnitSystem(currentTall, tallUnitIndex));
                 humanImageView.setImageResource(getImageForTall(currentTall));
                 setIconTall(currentTall);
             }
