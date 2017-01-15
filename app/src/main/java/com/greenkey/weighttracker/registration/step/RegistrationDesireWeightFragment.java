@@ -82,6 +82,8 @@ public class RegistrationDesireWeightFragment extends Fragment implements Step, 
             return new VerificationError(errorMessage);
         }
         else {
+            firstNumberPicker.clearFocus();
+            secondNumberPicker.clearFocus();
             final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
             desireWeight = WeightHelper.reconvert(value, weightUnitIndex);
             SettingsManager.setDesireWeight(desireWeight);

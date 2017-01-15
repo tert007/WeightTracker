@@ -81,6 +81,8 @@ public class StatisticsChartFragment extends Fragment implements OnDataChangedLi
         if (realmResults.size() <= 1) {
             emptyChartView.setVisibility(View.VISIBLE);
             return;
+        } else {
+            emptyChartView.setVisibility(View.GONE);
         }
 
         chart.clearChart();

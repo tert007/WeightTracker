@@ -146,6 +146,9 @@ public class StatisticsActivity extends AppCompatActivity implements OnDataChang
 
         builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                firstNumberPicker.clearFocus();
+                secondNumberPicker.clearFocus();
+
                 realm.beginTransaction();
 
                 WeightRecord weightRecord = realm.createObject(WeightRecord.class);

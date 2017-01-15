@@ -176,6 +176,8 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                firstNumberPicker.clearFocus();
+                secondNumberPicker.clearFocus();
 
                 final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
                 desireWeight = WeightHelper.reconvert(value, weightUnitIndex);
@@ -225,6 +227,8 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                firstNumberPicker.clearFocus();
+                secondNumberPicker.clearFocus();
 
                 final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
 
@@ -278,6 +282,8 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                firstNumberPicker.clearFocus();
+                secondNumberPicker.clearFocus();
 
                 final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
                 startWeight = WeightHelper.reconvert(value, weightUnitIndex);
@@ -329,6 +335,8 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                firstNumberPicker.clearFocus();
+                secondNumberPicker.clearFocus();
 
                 realm.beginTransaction();
 
@@ -408,6 +416,8 @@ public class MainActivity extends AppCompatActivity /*implements SettingsManager
 
         builder.setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                firstNumberPicker.clearFocus();
+                secondNumberPicker.clearFocus();
 
                 final float value = Float.valueOf(firstNumberPicker.getValue() + "." + secondNumberPicker.getValue());
                 final float reconvertedValue = WeightHelper.reconvert(value, weightUnitIndex);
