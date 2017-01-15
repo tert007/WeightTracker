@@ -30,6 +30,7 @@ import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.app.SettingsManager;
 import com.greenkey.weighttracker.main.MainActivity;
 import com.greenkey.weighttracker.registration.step.RegistrationDesireWeightFragment;
+import com.greenkey.weighttracker.registration.step.RegistrationUnitFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationtSexFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationStartWeightFragment;
 import com.greenkey.weighttracker.registration.step.RegistrationBirthDateFragment;
@@ -111,10 +112,12 @@ public abstract class AbstractStepperActivity extends AppCompatActivity implemen
                 case 1:
                     return new RegistrationBirthDateFragment();
                 case 2:
-                    return new RegistrationTallFragment();
+                    return new RegistrationUnitFragment();
                 case 3:
-                    return new RegistrationStartWeightFragment();
+                    return new RegistrationTallFragment();
                 case 4:
+                    return new RegistrationStartWeightFragment();
+                case 5:
                     return new RegistrationDesireWeightFragment();
                 default:
                     throw new IllegalArgumentException("Unsupported position: " + position);

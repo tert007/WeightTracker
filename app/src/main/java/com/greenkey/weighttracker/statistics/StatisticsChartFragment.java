@@ -9,18 +9,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.greenkey.weighttracker.R;
 import com.greenkey.weighttracker.entity.WeightRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmModel;
@@ -37,80 +44,56 @@ public class StatisticsChartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.statistics_chart_fragment, container, false);
-//if (true)
-        //return view;
-        /*Realm realm = Realm.getDefaultInstance();
 
+        Realm realm = Realm.getDefaultInstance();
         RealmResults realmResults = realm.where(WeightRecord.class).findAll();
+
         if (realmResults.isEmpty()) {
             return view;
         }
-*/
+
         chart = (LineChart) view.findViewById(R.id.chart);
         List<Entry> entries = new ArrayList<>();
 
-        setData(15, 15);
+        Iterator iterator = realmResults.iterator();
 
-        chart.invalidate();
-/*
-        //Iterator iterator = realmResults.iterator();
-        //while (iterator.hasNext()) {
-            //WeightRecord weightRecord = (WeightRecord) iterator.next();
-            entries.add(new Entry(15, 15));
-        //}
-        entries.add(new Entry(25, 35));
-        entries.add(new Entry(45, 15));
-        LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
-        //dataSet.setColor(...);
-        //dataSet.setValueTextColor(...); // styling, ...
+        while (iterator.hasNext()) {
+            WeightRecord weightRecord = (WeightRecord) iterator.next();
+            entries.add(new Entry(weightRecord.getDate(), weightRecord.getValue()));
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Label");
+
 
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
-        chart.invalidate(); // refresh
-*/
+        chart.invalidate();
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
+        xAxis.setTextSize(12f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawGridLines(true);
+        xAxis.setTextColor(Color.rgb(255, 192, 56));
+        xAxis.setCenterAxisLabels(true);
+        xAxis.setGranularity(24f); // one hour
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+
+            private SimpleDateFormat mFormat = new SimpleDateFormat("dd MMM HH:mm", Locale.getDefault());
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+
+                long millis = (long)value;
+                return mFormat.format(new Date(millis));
+            }
+
+            @Override
+            public int getDecimalDigits() {
+                return 0;
+            }
+        });
         return view;
-    }
-
-    private void setData(int count, float range) {
-
-        // now in hours
-        long now = 34;//TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-
-        ArrayList<Entry> values = new ArrayList<Entry>();
-
-        float from = now;
-
-        // count = hours
-        float to = now + count;
-
-        Random random = new Random();
-
-        // increment by 1 hour
-        for (float x = from; x < to; x++) {
-
-            float y = random.nextFloat() + 10;
-            values.add(new Entry(x, y)); // add one entry per hour
-        }
-
-        // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setColor(ColorTemplate.getHoloBlue());
-        set1.setValueTextColor(ColorTemplate.getHoloBlue());
-        set1.setLineWidth(1.5f);
-        set1.setDrawCircles(false);
-        set1.setDrawValues(false);
-        set1.setFillAlpha(65);
-        set1.setFillColor(ColorTemplate.getHoloBlue());
-        set1.setHighLightColor(Color.rgb(244, 117, 117));
-        set1.setDrawCircleHole(false);
-
-        // create a data object with the datasets
-        LineData data = new LineData(set1);
-        data.setValueTextColor(Color.WHITE);
-        data.setValueTextSize(9f);
-
-        // set data
-        chart.setData(data);
     }
 }
